@@ -23,6 +23,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import com.spectralogic.blackpearl.nacre.model.Service;
+import com.spectralogic.blackpearl.nacre.model.ServiceCifs;
+import com.spectralogic.blackpearl.nacre.model.ServiceNfs;
 import com.spectralogic.blackpearl.nacre.model.ServiceS3;
 
 import java.lang.reflect.Type;
@@ -34,6 +36,10 @@ public class ServiceDeserializer implements JsonDeserializer<Service> {
 
         if (jsonObject.has("iom_enabled")) {
             return context.deserialize(jsonObject, ServiceS3.class);
+        } else if(jsonObject.has("local_status")) {
+            return context.deserialize(jsonObject, ServiceCifs.class);
+        } else if(jsonObject.has("threads")) {
+            return context.deserialize(jsonObject, ServiceNfs.class);
         } else {
             return new Service();
         }

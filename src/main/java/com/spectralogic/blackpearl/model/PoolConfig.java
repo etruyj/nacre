@@ -32,7 +32,6 @@ public class PoolConfig extends Pool {
     private int drive_count;
     @SerializedName("stripe_name")
     private String stripe_name;
-    private Integer stripes;
 
     //===========================================
     // Constructors
@@ -51,7 +50,6 @@ public class PoolConfig extends Pool {
         this.setMetadataDrives(pool.isMetadataDrives());
         this.setDriveCount(pool.getDriveCount());
         this.setStripeName(pool.getStripeName());
-        this.setStripes(pool.getStripes());
     }
 
     //===========================================
@@ -66,7 +64,6 @@ public class PoolConfig extends Pool {
     public Boolean isMetadataDrives() { return metadata_drives; }
     public int getDriveCount() { return drive_count; }
     public String getStripeName() { return stripe_name; }
-    public Integer getStripes() { return stripes; }
 
     //===========================================
     // Setters
@@ -80,6 +77,5 @@ public class PoolConfig extends Pool {
     public void setMetadataDrives(Boolean has_drives) { this.metadata_drives = has_drives; }
     public void setDriveCount(int drives) { this.drive_count = drives; }
     public void setStripeName(String name) { this.stripe_name = name; }
-    public void setStripes(Integer stripes) { this.stripes = stripes; }
 }
 

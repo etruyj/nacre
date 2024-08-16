@@ -21,6 +21,7 @@ import com.spectralogic.blackpearl.nacre.model.Pool;
 import com.spectralogic.blackpearl.nacre.model.Service;
 import com.spectralogic.blackpearl.nacre.model.Share;
 import com.spectralogic.blackpearl.nacre.model.StorageDomain;
+import com.spectralogic.blackpearl.nacre.model.Tape;
 
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -57,6 +58,10 @@ public class BpController {
     //===========================================
     // Commands
     //===========================================
+
+    public void addActivationKeyUserInput(String key, String name) {
+        AddActivationKey.fromUserInput(key, name, defaults, pearl);
+    }
 
     public void backupDatabase() {
         CreateDatabaseBackup.newBackup(pearl);
@@ -104,6 +109,14 @@ public class BpController {
 
     public ArrayList<StorageDomain> listStorageDomains() {
         return ListStorageDomains.all(pearl);
+    }
+
+    public ArrayList<Tape> listTapes() {
+        return ListTapes.all(pearl);
+    }
+
+    public void listTapesByBucket() {
+        ListTapes.byBucket(pearl);
     }
 
     public ArrayList<Ds3User> listUsers() {

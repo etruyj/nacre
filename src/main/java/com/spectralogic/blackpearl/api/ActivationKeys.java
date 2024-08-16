@@ -1,8 +1,8 @@
 //===================================================================
 // ActivationKeys.java
 //      Description:
-//          This class handles the API calls related to activation
-//          keys.
+//          This class handles API calls to the BlackPearl related to
+//          the ActivationKeys.
 //
 // Created by Sean Snyder
 // Copyright Spectra Logic 2024
@@ -10,8 +10,9 @@
 
 package com.spectralogic.blackpearl.nacre.api;
 
-import com.spectralogic.blackpearl.nacre.model.ActivationKey;
 import com.spectralogic.vail.vapir.util.http.RestClient;
+import com.spectralogic.blackpearl.nacre.model.ApiDataResponse;
+import com.spectralogic.blackpearl.nacre.model.ActivationKey;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
@@ -31,7 +32,7 @@ public class ActivationKeys {
 
         String url = getUrl(ip_address);
         String payload = gson.toJson(key);
-        
+
         log.debug("API URL: POST " + url);
         log.debug("API Payload: " + payload);
 
@@ -39,7 +40,13 @@ public class ActivationKeys {
 
         log.debug("API Response: " + response);
 
-        return gson.fromJson(response, ActivationKey.class);
+        ActivationKey new_key =  gson.fromJson(response, ActivationKey.class);
+
+        if(response.contains("errors")) {
+            return null; 
+        } else {
+            return new_key;
+        }
     }
 
     public static ArrayList<ActivationKey> list(String ip_address, String token, RestClient rest_client) throws IOException, JsonParseException {
@@ -53,13 +60,14 @@ public class ActivationKeys {
 
         log.debug("API Response: " + response);
 
-        return gson.fromJson(response, new TypeToken<ArrayList<ActivationKey>>() {}.getType());
+        ApiDataResponse data = gson.fromJson(response, new TypeToken<ApiDataResponse<ActivationKey>>() {}.getType());
+
+        return data.getData();
     }
 
     //===========================================
     // Private Functions
     //===========================================
-
     private static String getUrl(String ip_address) {
         return ip_address + "/api/activation_keys";
     }

@@ -31,7 +31,7 @@ public class Pool {
     @SerializedName("zfs_status")
     private String zfs_status;
     @SerializedName("high_water_mark")
-    private int high_water_mark;
+    private Integer high_water_mark;
     @SerializedName("last_import_time")
     private String last_import_time;
     @SerializedName("created_at")
@@ -58,11 +58,23 @@ public class Pool {
     @SerializedName("special_disk_drives")
     private ArrayList<String> special_disk_ids;
     private String type;
-    
+    @SerializedName("encryption_state")
+    private String encryption_state;
+    @SerializedName("ds3_pool_health")
+    private String ds3_pool_health;
+
     //===========================================
     // Constructors
     //===========================================
-    public Pool() {} // blank to allow for a copy constructor.
+    public Pool() {
+        disk_ids = new ArrayList<String>();
+        topology = new ArrayList<Stripe>();
+        log = new ArrayList<String>();
+        zil_drives = new ArrayList<String>();
+        special = new ArrayList<String>();
+        special_drives = new ArrayList<String>();
+        special_disk_ids = new ArrayList<String>();
+    } 
 
     // Copy constructor
     public Pool(Pool other) {
@@ -88,14 +100,40 @@ public class Pool {
         this.setPowerSavingMode(other.getPowerSavingMode());
         this.setSpecialAvailable(other.getSpecialAvailable());
         this.setSpecialUsed(other.getSpecialUsed());
-        this.setDiskIds(other.getDiskIds());
-        this.setTopology(other.getTopology());
-        this.setLog(other.getLog());
-        this.setZilDrives(other.getZilDrives());
-        this.setSpecial(other.getSpecial());
-        this.setSpecialDrives(other.getSpecialDrives());
-        this.setSpecialDiskIds(other.getSpecialDiskIds());
         this.setType(other.getType());
+        this.setEncryptionState(other.getEncryptionState());
+        this.setDs3PoolHealth(other.getDs3PoolHealth());
+    
+        //=== Copy disk_ids ===
+        disk_ids = new ArrayList<String>();
+        for(String id : other.getDiskIds()) { disk_ids.add(id); }
+
+        //=== Copy Topology ===
+        topology = new ArrayList<Stripe>();
+        for(Stripe stripe : other.getTopology()) { topology.add(stripe); }
+
+        //=== Copy Log ===
+        log = new ArrayList<String>();
+        for(String line : other.getLog()) { log.add(line); }
+
+        //=== Copy Zil Drives ===
+        zil_drives = new ArrayList<String>();
+        for(String drive : other.getZilDrives()) { zil_drives.add(drive); }
+
+        //=== Copy special ===
+        special = new ArrayList<String>();
+        for(String drive : other.getSpecial()) { special.add(drive); }
+
+        //=== Copy special_drives ===
+        special_drives = new ArrayList<String>();
+        for(String drive : other.getSpecial()) { special_drives.add(drive); }
+
+        //=== Copy special_disk_ids ===
+        special_disk_ids = new ArrayList<String>();
+        for(String drive : other.getSpecial()) { special_disk_ids.add(drive); }
+
+        
+
     }
     
     //===========================================
@@ -114,7 +152,7 @@ public class Pool {
     public long getOverhead() { return overhead; }
     public long getUsed() { return used; }
     public String getZfsStatus() { return zfs_status; }
-    public int getHighWaterMark() { return high_water_mark; }
+    public Integer getHighWaterMark() { return high_water_mark; }
     public String getLastImportTime() { return last_import_time; }
     public String getCreatedAt() { return created_at; }
     public String getUpdatedAt() { return updated_at; }
@@ -131,10 +169,14 @@ public class Pool {
     public ArrayList<String> getSpecialDrives() { return special_drives; }
     public ArrayList<String> getSpecialDiskIds() { return special_disk_ids; }
     public String getType() { return type; }
-    
+    public String getEncryptionState() { return encryption_state; }
+    public String getDs3PoolHealth() { return ds3_pool_health; }
+
     //===========================================
     // Settors
     //===========================================
+    public void addDiskId(String id) { disk_ids.add(id); }
+    public void addStripe(Stripe stripe) { topology.add(stripe); }
     public void setId(String id) { this.id = id; }
     public void setName(String name) { this.name = name; }
     public void setProtection(String protection) { this.protection = protection; }
@@ -148,7 +190,7 @@ public class Pool {
     public void setOverhead(long overhead) { this.overhead = overhead; }
     public void setUsed(long used) { this.used = used; }
     public void setZfsStatus(String zfs_status) { this.zfs_status = zfs_status; }
-    public void setHighWaterMark(int high_water_mark) { this.high_water_mark = high_water_mark; }
+    public void setHighWaterMark(Integer high_water_mark) { this.high_water_mark = high_water_mark; }
     public void setLastImportTime(String last_import_time) { this.last_import_time = last_import_time; }
     public void setCreatedAt(String created_at) { this.created_at = created_at; }
     public void setUpdatedAt(String updated_at) { this.updated_at = updated_at; }
@@ -165,5 +207,6 @@ public class Pool {
     public void setSpecialDrives(ArrayList<String> special_drives) { this.special_drives = special_drives; }
     public void setSpecialDiskIds(ArrayList<String> special_disk_ids) { this.special_disk_ids = special_disk_ids; }
     public void setType(String type) { this.type = type; }
-
+    public void setEncryptionState(String state) { this.encryption_state = state; }
+    public void setDs3PoolHealth(String state) { this.ds3_pool_health = state; }
 }

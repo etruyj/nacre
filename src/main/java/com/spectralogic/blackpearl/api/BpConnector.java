@@ -24,7 +24,9 @@ import com.spectralogic.blackpearl.nacre.model.ServiceS3;
 import com.spectralogic.blackpearl.nacre.model.Share;
 import com.spectralogic.blackpearl.nacre.model.StorageDomain;
 import com.spectralogic.blackpearl.nacre.model.StorageDomainMember;
+import com.spectralogic.blackpearl.nacre.model.Tape;
 import com.spectralogic.blackpearl.nacre.model.TapePartition;
+import com.spectralogic.blackpearl.nacre.model.Volume;
 import com.spectralogic.vail.vapir.util.http.RestClient;
 
 import com.google.gson.JsonParseException;
@@ -53,6 +55,8 @@ public class BpConnector {
         }
     }
 
+    public String getDomainName() { return domain_name; }
+
     //===========================================
     // API Calls
     //===========================================
@@ -69,6 +73,18 @@ public class BpConnector {
         return StorageDomainMembers.add(member, domain_name, token, rest_client);
     }
 
+    public Ds3Bucket createDs3Bucket(Ds3Bucket bucket) throws IOException, JsonParseException {
+        return Buckets.create(bucket, domain_name, token, rest_client);
+    }
+
+    public DiskPartition createDs3DiskPartition(DiskPartition par) throws IOException, JsonParseException {
+        return Ds3DiskPartitions.create(par, domain_name, token, rest_client);
+    }
+
+    public Pool createDs3Pool(Pool pool) throws IOException, JsonParseException {
+        return Ds3Pools.create(pool, domain_name, token, rest_client);
+    }
+
     public ServiceS3 createDatabaseBackup(ServiceS3 s3_service) throws IOException, JsonParseException {
         return Services.putDatabaseBackup(s3_service, domain_name, token, rest_client);
     }
@@ -77,12 +93,28 @@ public class BpConnector {
         return DataPolicies.create(policy, domain_name, token, rest_client);
     }
 
+    public Pool createPool(Pool pool) throws IOException, JsonParseException {
+        return Pools.create(pool, domain_name, token, rest_client);
+    }
+
+    public Share createShare(Share share) throws IOException, JsonParseException {
+        return Shares.create(share, domain_name, token, rest_client);
+    }
+
     public StorageDomain createStorageDomain(StorageDomain domain) throws IOException, JsonParseException {
         return StorageDomains.create(domain, domain_name, token, rest_client);
     }
 
+    public Volume createVolume(Volume volume) throws IOException, JsonParseException {
+        return Volumes.create(volume, domain_name, token, rest_client);
+    }
+
     public ScheduleDatabaseBackup getDatabaseBackupSchedule() throws IOException, JsonParseException {
         return DatabaseBackups.getBackupSchedule(domain_name, token, rest_client);
+    }
+
+    public Pool getDs3Pool(String pool_id) throws IOException, JsonParseException {
+        return Ds3Pools.get(pool_id, domain_name, token, rest_client);
     }
 
     public ArrayList<ActivationKey> listActivationKeys() throws IOException, JsonParseException {
@@ -91,6 +123,10 @@ public class BpConnector {
 
     public ArrayList<Ds3Bucket> listBuckets() throws IOException, JsonParseException {
         return Buckets.list(domain_name, token, rest_client);
+    }
+
+    public ArrayList<Pool> listDs3Pools() throws IOException, JsonParseException {
+        return Ds3Pools.list(domain_name, token, rest_client);
     }
 
     public ArrayList<DataPolicy> listDataPolicies() throws IOException, JsonParseException {
@@ -121,12 +157,20 @@ public class BpConnector {
         return StorageDomains.list(domain_name, token, rest_client);
     }
 
+    public ArrayList<Tape> listTapes() throws IOException, JsonParseException {
+        return Tapes.list(domain_name, token, rest_client);
+    }
+
     public ArrayList<TapePartition> listTapePartitions() throws IOException, JsonParseException {
         return TapePartitions.list(domain_name, token, rest_client);
     }
 
     public ArrayList<Ds3User> listUsers() throws IOException, JsonParseException {
         return Users.list(domain_name, token, rest_client);
+    }
+
+    public ArrayList<Volume> listVolumes() throws IOException, JsonParseException {
+        return Volumes.list(domain_name, token, rest_client);
     }
 
     public boolean login(String username, String password) throws IOException, JsonParseException {

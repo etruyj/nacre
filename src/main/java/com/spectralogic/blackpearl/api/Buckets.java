@@ -27,6 +27,23 @@ import org.slf4j.LoggerFactory;
 public class Buckets {
     private static final Logger log = LoggerFactory.getLogger(Buckets.class);
 
+    public static Ds3Bucket create(Ds3Bucket bucket, String ip_address, String token, RestClient rest_client) throws IOException, JsonParseException {
+        Gson gson = new Gson();
+
+        String url = getUrl(ip_address);
+        String payload = gson.toJson(bucket);
+
+        log.debug("API URL: GET " + url);
+        log.debug("API Payload: " + payload);
+
+        String response = rest_client.post(url, token, payload);
+
+        log.debug("API Response " + response);
+
+        return gson.fromJson(response, Ds3Bucket.class);
+
+    }
+
     public static ArrayList<Ds3Bucket> list(String ip_address, String token, RestClient rest_client) throws IOException, JsonParseException {
         Gson gson = new Gson();
 

@@ -19,6 +19,20 @@ public class DiskPartition {
     @SerializedName("pool_ids")
     private ArrayList<String> poolIds;
     private String type;
+    
+    public DiskPartition() {
+        poolIds = new ArrayList<String>();
+    }
+
+    // Copy Constructor
+    public DiskPartition(DiskPartition par) {
+        this.setName(par.getName());
+        this.setType(par.getType());
+
+        //=== Copy poolIds ===
+        poolIds = new ArrayList<String>();
+        for(String id : par.getPoolIds()) { poolIds.add(id); }
+    }
 
     //===========================================
     // Getters
@@ -30,6 +44,7 @@ public class DiskPartition {
     //===========================================
     // Setters
     //===========================================
+    public void addPoolId(String id) { this.poolIds.add(id); }
     public void setName(String name) { this.name = name; }
     public void setPoolIds(ArrayList<String> poolIds) { this.poolIds = poolIds; }
     public void setType(String type) { this.type = type; }

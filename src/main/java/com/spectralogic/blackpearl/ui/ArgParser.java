@@ -23,6 +23,8 @@ public class ArgParser {
 
     public void parse(String[] args) {
         int i = 0;
+        int value_counter = 0;
+        String value = "";
 
         while(i < args.length) {
             if(args[i].substring(0, 2).equals("--")) { // see if the argument starts with --, denoting a flag.
@@ -30,15 +32,30 @@ public class ArgParser {
                     if(args[i+1].substring(0, 1).equals("-")) { // the next arg is also a flag, so this one is a boolean.
                         arg_map.put(args[i].substring(2, args[i].length()), "true"); // if there isn't a value assigned with the flag, assume it's a bool.
                     } else {
-                        arg_map.put(args[i].substring(2, args[i].length()), args[i+1]); // Store the value with the flag.
+                        // loop through the next fields to allow for spaces in the input.
+                        // check to see if there is a flag marker on the next input.
+                        // reset temp vars
+                        value_counter = i+1;
+                        value = "";
+                        
+                        while(value_counter < args.length && !args[value_counter].substring(0,1).equals("-")) {
+                            value = value + args[value_counter] + " ";
+                            value_counter++;
+                        }
+                        
+                        value = value.trim();
+
+                        //arg_map.put(args[i].substring(2, args[i].length()), args[i+1]); // Store the value with the flag.
+                        arg_map.put(args[i].substring(2, args[i].length()), value); // Store the value with the flag.
                         i++; // incrememt an extra time as we need to skip the flag and then the value.
                     }
                 } else {
                     arg_map.put(args[i].substring(2, args[i].length()), "true"); // if there isn't a value assigned with the flag, assume it's a bool.
                 }
                 
-                i++; // increment past the flag.
             }
+            
+            i++; // increment past the flag.
         }
     }
 

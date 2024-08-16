@@ -13,8 +13,10 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 
 public class BpConfig {
-    @SerializedName("disk_pools")
-    private ArrayList<PoolConfig> disk_pools;
+    @SerializedName("activation_keys")
+    private ArrayList<ActivationKeyConfig> activation_keys;
+    @SerializedName("disk_partitions")
+    private ArrayList<PoolConfig> disk_partitions;
     @SerializedName("storage_domains")
     private ArrayList<StorageDomainConfig> storage_domains;
     @SerializedName("data_policies")
@@ -34,7 +36,8 @@ public class BpConfig {
     //===========================================
     // Getters
     //===========================================
-    public ArrayList<PoolConfig> getDiskPools() { return disk_pools; }
+    public ArrayList<ActivationKeyConfig> getActivationKeys() { return activation_keys; }
+    public ArrayList<PoolConfig> getDiskPartitions() { return disk_partitions; }
     public ArrayList<StorageDomainConfig> getStorageDomains() { return storage_domains; }
     public ArrayList<DataPolicyConfig> getDataPolicies() { return data_policies; }
     public ArrayList<Ds3BucketConfig> getBuckets() { return buckets; }
@@ -47,7 +50,8 @@ public class BpConfig {
     //===========================================
     // Setters
     //===========================================
-    public void setDiskPools(ArrayList<PoolConfig> pools) { this.disk_pools = pools; }
+    public void setActivationKeys(ArrayList<ActivationKeyConfig> keys) { this.activation_keys = keys; }
+    public void setDiskPartitions(ArrayList<PoolConfig> pools) { this.disk_partitions = pools; }
     public void setStorageDomains(ArrayList<StorageDomainConfig> domains) { this.storage_domains = domains; }
     public void setDataPolicies(ArrayList<DataPolicyConfig> policies) { this.data_policies = policies; }
     public void setBuckets(ArrayList<Ds3BucketConfig> buckets) { this.buckets = buckets; }

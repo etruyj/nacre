@@ -28,7 +28,6 @@ public class ServiceS3 extends Service {
     private String created_at;
     @SerializedName("updated_at")
     private String updated_at;
-    private String id;
     private String status;
     private int port;
     @SerializedName("iom_enable_cron_string")
@@ -73,7 +72,6 @@ public class ServiceS3 extends Service {
     public boolean isEnabled() { return enabled; }
     public String getCreatedAt() { return created_at; }
     public String getUpdatedAt() { return updated_at; }
-    public String getId() { return id; }
     public String getStatus() { return status; }
     public int getPort() { return port; }
     public String getIomEnableCronString() { return iom_enable_cron_string; }
@@ -104,7 +102,6 @@ public class ServiceS3 extends Service {
     public void setEnabled(boolean enabled) { this.enabled = enabled; }
     public void setCreatedAt(String created_at) { this.created_at = created_at; }
     public void setUpdatedAt(String updated_at) { this.updated_at = updated_at; }
-    public void setId(String id) { this.id = id; }
     public void setStatus(String status) { this.status = status; }
     public void setPort(int port) { this.port = port; }
     public void setIomEnableCronString(String iom_enable_cron_string) { this.iom_enable_cron_string = iom_enable_cron_string; }

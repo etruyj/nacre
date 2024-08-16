@@ -35,6 +35,9 @@ public class NacreShell {
     public static void processCommand(ArgParser aparser, BpController conn) {
         try {
             switch(aparser.getRequiredValue("command")) {
+                case "add-key":
+                    conn.addActivationKeyUserInput(aparser.getRequiredValue("key"), aparser.getValue("name"));
+                    break;
                 case "backup-database":
                     conn.backupDatabase();
                     break;
@@ -53,7 +56,7 @@ public class NacreShell {
                                             Integer.valueOf(aparser.getRequiredValue("keep-copies")));
                     break;
                 case "test":
-                    conn.listPools();
+//                    conn.addActivationKey();
                     break;
                 default:
                     System.err.println("Invalid command [" + aparser.getRequiredValue("command") + "] selected.");

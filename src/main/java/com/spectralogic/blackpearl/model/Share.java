@@ -29,7 +29,12 @@ public class Share {
     @SerializedName("mount_point")
     private String mount_point;
     private String status;
-    
+    private boolean readonly;
+    //=== NFS Specific ===
+    @SerializedName("access_control")
+    private String access_control;
+    private String comment;
+
     //===========================================
     // Constructors
     //===========================================
@@ -48,6 +53,9 @@ public class Share {
         this.setId(other.getId());
         this.setMountPoint(other.getMountPoint());
         this.setStatus(other.getStatus());
+        this.setAccessControl(other.getAccessControl());
+        this.setComment(other.getComment());
+        this.setReadonly(other.isReadonly());
     }
 
     //===========================================
@@ -65,7 +73,10 @@ public class Share {
     public String getId() { return id; }
     public String getMountPoint() { return mount_point; }
     public String getStatus() { return status; }
-    
+    public String getAccessControl() { return access_control; }
+    public String getComment() { return comment; }
+    public boolean isReadonly() { return readonly; }
+
     //===========================================
     // Settors
     //===========================================
@@ -79,5 +90,7 @@ public class Share {
     public void setId(String id) { this.id = id; }
     public void setMountPoint(String mount_point) { this.mount_point = mount_point; }
     public void setStatus(String status) { this.status = status; }
-
+    public void setAccessControl(String access) { this.access_control = access; }
+    public void setComment(String comment) { this.comment = comment; }
+    public void setReadonly(boolean readonly) { this.readonly = readonly; }
 }

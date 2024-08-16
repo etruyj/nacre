@@ -1,7 +1,9 @@
 //===================================================================
-// ApiDataResponse.java
+// ApiObjectResponse.java
 //      Description:
-//          This class holds pagenated data responses from the API.
+//          This class holds pagenated data responses from the API
+//          for when the API only returns a single object such as get
+//          object request.
 //
 // Created by Sean Snyder
 // Copyright Spectra Logic 2024
@@ -11,24 +13,19 @@ package com.spectralogic.blackpearl.nacre.model;
 
 import java.util.ArrayList;
 
-public class ApiDataResponse<T> {
-    private ArrayList<T> data;
+public class ApiObjectResponse<T> {
+    private T data;
     private int count;
-
-    public ApiDataResponse() {
-        data = new ArrayList<T>();
-    }
 
     //===========================================
     // Getters
     //===========================================
-    public ArrayList<T> getData() { return data; }
+    public T getData() { return data; }
     public int getCount() { return count; }
 
     //===========================================
     // Setters
     //===========================================
-    public void setData(ArrayList<T> data) { this.data = data; }
-    public void setData(T obj) { this.data.add(obj); }
+    public void setData(T obj) { this.data = obj; }
     public void setCount(int count) { this.count = count; }
 }

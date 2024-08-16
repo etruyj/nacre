@@ -27,6 +27,28 @@ import org.slf4j.LoggerFactory;
 public class Ds3DiskPartitions {
     private static final Logger log = LoggerFactory.getLogger(Ds3DiskPartitions.class);
 
+    public static DiskPartition create(DiskPartition par, String ip_address, String token, RestClient rest_client) throws IOException, JsonParseException {
+        Gson gson = new Gson();
+
+        String url = getUrl(ip_address);
+        String payload = gson.toJson(par);
+
+        log.debug("API URL: POST " + url);
+        log.debug("API Payload: " + payload);
+
+        String response = rest_client.post(url, token, payload);
+
+        log.debug("API Response: " + response);
+
+        DiskPartition new_par = gson.fromJson(response, DiskPartition.class);
+    
+        if(new_par.getName() != null) {
+            return new_par;
+        } else {
+            return null;
+        }
+    }
+
     public static ArrayList<DiskPartition> list(String ip_address, String token, RestClient rest_client) throws IOException, JsonParseException {
         Gson gson = new Gson();
 

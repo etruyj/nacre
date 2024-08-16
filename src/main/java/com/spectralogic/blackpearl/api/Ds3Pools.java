@@ -1,8 +1,8 @@
 //===================================================================
-// Pools.java
+// Ds3Pools.java
 //      Description:
 //          This class handles API calls to the BlackPearl related to
-//          the Pools.
+//          the Ds3Pools.
 //
 // Created by Sean Snyder
 // Copyright Spectra Logic 2024
@@ -12,6 +12,7 @@ package com.spectralogic.blackpearl.nacre.api;
 
 import com.spectralogic.vail.vapir.util.http.RestClient;
 import com.spectralogic.blackpearl.nacre.model.ApiDataResponse;
+import com.spectralogic.blackpearl.nacre.model.ApiObjectResponse;
 import com.spectralogic.blackpearl.nacre.model.Pool;
 
 import com.google.gson.Gson;
@@ -24,8 +25,8 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Pools {
-    private static final Logger log = LoggerFactory.getLogger(Pools.class);
+public class Ds3Pools {
+    private static final Logger log = LoggerFactory.getLogger(Ds3Pools.class);
 
     public static Pool create(Pool pool, String ip_address, String token, RestClient rest_client) throws IOException, JsonParseException {
         Gson gson = new Gson();
@@ -40,7 +41,33 @@ public class Pools {
 
         log.debug("API Response: " + response);
 
-        return gson.fromJson(response, Pool.class);
+        Pool new_pool = gson.fromJson(response, Pool.class);
+
+        if(new_pool.getName() != null) {
+            return new_pool;
+        } else {
+            return null;
+        }
+    }
+
+    public static Pool get(String pool_id, String ip_address, String token, RestClient rest_client) throws IOException, JsonParseException {
+        Gson gson = new Gson();
+
+        String url = getUrl(ip_address) + "/" + pool_id;
+
+        log.debug("API URL: GET " + url);
+
+        String response = rest_client.get(url, token);
+
+        log.debug("API Response: " + response);
+
+        ApiObjectResponse data = gson.fromJson(response, new TypeToken<ApiObjectResponse<Pool>>() {}.getType());
+
+        if(data.getData() != null) {
+            return (Pool)data.getData();
+        } else {
+            throw new JsonParseException("Unable to parse get pool response.");
+        }
     }
 
     public static ArrayList<Pool> list(String ip_address, String token, RestClient rest_client) throws IOException, JsonParseException {
@@ -63,6 +90,6 @@ public class Pools {
     // Private Functions
     //===========================================
     private static String getUrl(String ip_address) {
-        return ip_address + "/api/pools";
+        return ip_address + "/api/ds3/pools";
     }
 }

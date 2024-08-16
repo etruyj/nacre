@@ -14,6 +14,11 @@ import java.util.ArrayList;
 public class Stripe {
     private ArrayList<DiskDrive> children;
     private String type;
+    
+    public Stripe() {
+        children = new ArrayList<DiskDrive>();
+    }
+
 
     //===========================================
     // Gettors
