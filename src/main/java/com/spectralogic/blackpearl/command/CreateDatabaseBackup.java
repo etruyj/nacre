@@ -42,6 +42,12 @@ public class CreateDatabaseBackup {
                 
                 s3_service.setTriggerBackup(true);
 
+                // Set auto_activate_timeout_in_mins to null if the value is 0
+                // per the requirement of the API. Otherwise a BadReqeust [400] is sent.
+                if(s3_service.getAutoActivateTimeoutInMins() == 0) {
+                    s3_service.setAutoActivateTimeoutInMins(null);
+                }
+
                 s3_service = pearl.createDatabaseBackup(s3_service);
 
                 if(s3_service != null) {
@@ -50,10 +56,8 @@ public class CreateDatabaseBackup {
                 } else {
                     log.error("Failed to create database backup.");
                 }
-            } else {
-                Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-                System.out.println(gson.toJson(service_list));
+            } else { 
+                log.warn("DS3 services are not enabled. Unable to backup database.");
             }
         } catch(Exception e) {
             log.error(e.getMessage());

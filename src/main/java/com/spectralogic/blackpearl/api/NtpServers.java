@@ -1,8 +1,8 @@
 //===================================================================
-// Pools.java
+// NtpServers.java
 //      Description:
 //          This class handles API calls to the BlackPearl related to
-//          the Pools.
+//          the NtpServers.
 //
 // Created by Sean Snyder
 // Copyright Spectra Logic 2024
@@ -12,7 +12,7 @@ package com.spectralogic.blackpearl.nacre.api;
 
 import com.spectralogic.vail.vapir.util.http.RestClient;
 import com.spectralogic.blackpearl.nacre.model.ApiDataResponse;
-import com.spectralogic.blackpearl.nacre.model.Pool;
+import com.spectralogic.blackpearl.nacre.model.NtpSettings;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
@@ -24,33 +24,32 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Pools {
-    private static final Logger log = LoggerFactory.getLogger(Pools.class);
+public class NtpServers {
+    private static final Logger log = LoggerFactory.getLogger(NtpServers.class);
 
-    public static Pool create(Pool pool, String ip_address, String token, RestClient rest_client) throws IOException, JsonParseException {
+    public static NtpSettings update(NtpSettings settings, String ip_address, String token, RestClient rest_client) throws IOException, JsonParseException {
         Gson gson = new Gson();
 
-        String url = getUrl(ip_address);
-        String payload = gson.toJson(pool);
+        String url = getUrl(ip_address) + "/1"; // the /1 is a constant for PUT requests.
+        String payload = gson.toJson(settings);
 
-        log.debug("API URL: POST " + url);
+        log.debug("API URL: PUT " + url);
         log.debug("API Payload: " + payload);
 
-        String response = rest_client.post(url, token, payload);
+        String response = rest_client.put(url, token, payload);
 
         log.debug("API Response: " + response);
 
-        Pool new_pool =  gson.fromJson(response, Pool.class);
-    
-        // Check if pool was really created or just a null reference
-        if(new_pool.getName() != null) {
-            return new_pool;
+        NtpSettings new_settings =  gson.fromJson(response, NtpSettings.class);
+
+        if(new_settings.getCurrentTime() != null) {
+            return new_settings;
         } else {
             return null;
         }
     }
 
-    public static ArrayList<Pool> list(String ip_address, String token, RestClient rest_client) throws IOException, JsonParseException {
+    public static ArrayList<NtpSettings> list(String ip_address, String token, RestClient rest_client) throws IOException, JsonParseException {
         Gson gson = new Gson();
 
         String url = getUrl(ip_address);
@@ -61,7 +60,7 @@ public class Pools {
 
         log.debug("API Response: " + response);
 
-        ApiDataResponse data = gson.fromJson(response, new TypeToken<ApiDataResponse<Pool>>() {}.getType());
+        ApiDataResponse data = gson.fromJson(response, new TypeToken<ApiDataResponse<NtpSettings>>() {}.getType());
 
         return data.getData();
     }
@@ -70,6 +69,6 @@ public class Pools {
     // Private Functions
     //===========================================
     private static String getUrl(String ip_address) {
-        return ip_address + "/api/pools";
+        return ip_address + "/api/ntp_servers";
     }
 }

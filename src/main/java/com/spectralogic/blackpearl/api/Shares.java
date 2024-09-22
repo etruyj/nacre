@@ -40,7 +40,14 @@ public class Shares {
 
         log.debug("API Response: " + response);
 
-        return gson.fromJson(response, Share.class);
+        Share new_share = gson.fromJson(response, Share.class);
+    
+        // Check if a new share was created or just an empty reference.
+        if(new_share.getName() != null) {
+            return new_share;
+        } else {
+            return null;
+        }
     }
 
     public static ArrayList<Share> list(String ip_address, String token, RestClient rest_client) throws IOException, JsonParseException {

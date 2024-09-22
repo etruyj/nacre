@@ -1,8 +1,8 @@
 //===================================================================
-// Pools.java
+// Nodes.java
 //      Description:
 //          This class handles API calls to the BlackPearl related to
-//          the Pools.
+//          the Nodes.
 //
 // Created by Sean Snyder
 // Copyright Spectra Logic 2024
@@ -12,7 +12,7 @@ package com.spectralogic.blackpearl.nacre.api;
 
 import com.spectralogic.vail.vapir.util.http.RestClient;
 import com.spectralogic.blackpearl.nacre.model.ApiDataResponse;
-import com.spectralogic.blackpearl.nacre.model.Pool;
+import com.spectralogic.blackpearl.nacre.model.BlackPearlNode;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
@@ -24,33 +24,32 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Pools {
-    private static final Logger log = LoggerFactory.getLogger(Pools.class);
+public class Nodes {
+    private static final Logger log = LoggerFactory.getLogger(Nodes.class);
 
-    public static Pool create(Pool pool, String ip_address, String token, RestClient rest_client) throws IOException, JsonParseException {
+    public static BlackPearlNode update(BlackPearlNode node, String ip_address, String token, RestClient rest_client) throws IOException, JsonParseException {
         Gson gson = new Gson();
 
-        String url = getUrl(ip_address);
-        String payload = gson.toJson(pool);
+        String url = getUrl(ip_address) + "/" + node.getSerialNumber();
+        String payload = gson.toJson(node);
 
-        log.debug("API URL: POST " + url);
+        log.debug("API URL: PUT " + url);
         log.debug("API Payload: " + payload);
 
-        String response = rest_client.post(url, token, payload);
+        String response = rest_client.put(url, token, payload);
 
         log.debug("API Response: " + response);
 
-        Pool new_pool =  gson.fromJson(response, Pool.class);
-    
-        // Check if pool was really created or just a null reference
-        if(new_pool.getName() != null) {
-            return new_pool;
+        BlackPearlNode new_node =  gson.fromJson(response, BlackPearlNode.class);
+
+        if(new_node.getName() != null) {
+            return new_node;
         } else {
             return null;
         }
     }
 
-    public static ArrayList<Pool> list(String ip_address, String token, RestClient rest_client) throws IOException, JsonParseException {
+    public static ArrayList<BlackPearlNode> list(String ip_address, String token, RestClient rest_client) throws IOException, JsonParseException {
         Gson gson = new Gson();
 
         String url = getUrl(ip_address);
@@ -61,7 +60,7 @@ public class Pools {
 
         log.debug("API Response: " + response);
 
-        ApiDataResponse data = gson.fromJson(response, new TypeToken<ApiDataResponse<Pool>>() {}.getType());
+        ApiDataResponse data = gson.fromJson(response, new TypeToken<ApiDataResponse<BlackPearlNode>>() {}.getType());
 
         return data.getData();
     }
@@ -70,6 +69,6 @@ public class Pools {
     // Private Functions
     //===========================================
     private static String getUrl(String ip_address) {
-        return ip_address + "/api/pools";
+        return ip_address + "/api/nodes";
     }
 }

@@ -47,7 +47,7 @@ public class ShareConfig extends Share {
     public Long getMaxSize() { return max_size; }
     public boolean isAlreadyExists() { return already_exists; }
     public ArrayList<String> getPermissions() { return permissions; }
-    public String getAccessControl() {
+    public String getPermissionsString() {
         StringBuilder control = new StringBuilder();
 
         for(String line : permissions) {
@@ -55,7 +55,7 @@ public class ShareConfig extends Share {
             control.append("\n");
         }
 
-        return control.toString();
+        return control.toString().substring(0, control.length()-1); // return all but the last endline character.
     }
 
     //===========================================

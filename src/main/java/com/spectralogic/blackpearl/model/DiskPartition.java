@@ -15,6 +15,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 
 public class DiskPartition {
+    private String id;
     private String name;
     @SerializedName("pool_ids")
     private ArrayList<String> poolIds;
@@ -26,6 +27,7 @@ public class DiskPartition {
 
     // Copy Constructor
     public DiskPartition(DiskPartition par) {
+        this.setId(par.getId());
         this.setName(par.getName());
         this.setType(par.getType());
 
@@ -37,6 +39,7 @@ public class DiskPartition {
     //===========================================
     // Getters
     //===========================================
+    public String getId() { return id; }
     public String getName() { return name; }
     public ArrayList<String> getPoolIds() { return poolIds; }
     public String getType() { return type; }
@@ -45,6 +48,7 @@ public class DiskPartition {
     // Setters
     //===========================================
     public void addPoolId(String id) { this.poolIds.add(id); }
+    public void setId(String id) { this.id = id; }
     public void setName(String name) { this.name = name; }
     public void setPoolIds(ArrayList<String> poolIds) { this.poolIds = poolIds; }
     public void setType(String type) { this.type = type; }

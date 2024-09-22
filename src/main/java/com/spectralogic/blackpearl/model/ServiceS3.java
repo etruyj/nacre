@@ -38,7 +38,7 @@ public class ServiceS3 extends Service {
     @SerializedName("allow_new_job_requests")
     private boolean allow_new_job_requests;
     @SerializedName("auto_activate_timeout_in_mins")
-    private int auto_activate_timeout_in_mins;
+    private Integer auto_activate_timeout_in_mins;
     @SerializedName("auto_inspect")
     private String auto_inspect;
     @SerializedName("default_verify_data_prior_to_import")
@@ -78,7 +78,7 @@ public class ServiceS3 extends Service {
     public String getIomDisableCronString() { return iom_disable_cron_string; }
     public boolean isActivated() { return activated; }
     public boolean isAllowNewJobRequests() { return allow_new_job_requests; }
-    public int getAutoActivateTimeoutInMins() { return auto_activate_timeout_in_mins; }
+    public Integer getAutoActivateTimeoutInMins() { return auto_activate_timeout_in_mins; }
     public String getAutoInspect() { return auto_inspect; }
     public boolean isDefaultVerifyDataPriorToImport() { return default_verify_data_prior_to_import; }
     public String getDefaultVerifyDataAfterImport() { return default_verify_data_after_import; }
@@ -108,7 +108,7 @@ public class ServiceS3 extends Service {
     public void setIomDisableCronString(String iom_disable_cron_string) { this.iom_disable_cron_string = iom_disable_cron_string; }
     public void setActivated(boolean activated) { this.activated = activated; }
     public void setAllowNewJobRequests(boolean allow_new_job_requests) { this.allow_new_job_requests = allow_new_job_requests; }
-    public void setAutoActivateTimeoutInMins(int auto_activate_timeout_in_mins) { this.auto_activate_timeout_in_mins = auto_activate_timeout_in_mins; }
+    public void setAutoActivateTimeoutInMins(Integer auto_activate_timeout_in_mins) { this.auto_activate_timeout_in_mins = auto_activate_timeout_in_mins; }
     public void setAutoInspect(String auto_inspect) { this.auto_inspect = auto_inspect; }
     public void setDefaultVerifyDataPriorToImport(boolean default_verify_data_prior_to_import) { this.default_verify_data_prior_to_import = default_verify_data_prior_to_import; }
     public void setDefaultVerifyDataAfterImport(String default_verify_data_after_import) { this.default_verify_data_after_import = default_verify_data_after_import; }

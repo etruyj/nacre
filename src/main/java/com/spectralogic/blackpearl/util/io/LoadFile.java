@@ -16,7 +16,22 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.StringBuilder;
 
+import java.util.ArrayList;
+
 public class LoadFile {
+    public static ArrayList<String> toList(String file) throws IOException {
+        ArrayList<String> file_data = new ArrayList<String>();
+        String line = null;
+
+        BufferedReader br = new BufferedReader(new FileReader(new File(file)));
+
+        while((line = br.readLine()) != null) {
+            file_data.add(line);
+        }
+
+        return file_data;
+    }
+
     public static String toString(String file) throws IOException {
         StringBuilder file_string = new StringBuilder();
 

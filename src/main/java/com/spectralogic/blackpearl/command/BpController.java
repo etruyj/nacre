@@ -10,6 +10,8 @@
 package com.spectralogic.blackpearl.nacre.command;
 
 import com.spectralogic.blackpearl.nacre.api.BpConnector;
+import com.spectralogic.blackpearl.nacre.model.ActivationKeyConfig;
+import com.spectralogic.blackpearl.nacre.model.BlackPearlNode;
 import com.spectralogic.blackpearl.nacre.model.BpConfig;
 import com.spectralogic.blackpearl.nacre.model.DataPolicy;
 import com.spectralogic.blackpearl.nacre.model.DefaultsConfig;
@@ -17,9 +19,12 @@ import com.spectralogic.blackpearl.nacre.model.DiskDrive;
 import com.spectralogic.blackpearl.nacre.model.DiskPartition;
 import com.spectralogic.blackpearl.nacre.model.Ds3Bucket;
 import com.spectralogic.blackpearl.nacre.model.Ds3User;
+import com.spectralogic.blackpearl.nacre.model.NetworkInterface;
+import com.spectralogic.blackpearl.nacre.model.NtpSettings;
 import com.spectralogic.blackpearl.nacre.model.Pool;
 import com.spectralogic.blackpearl.nacre.model.Service;
 import com.spectralogic.blackpearl.nacre.model.Share;
+import com.spectralogic.blackpearl.nacre.model.SmtpSettings;
 import com.spectralogic.blackpearl.nacre.model.StorageDomain;
 import com.spectralogic.blackpearl.nacre.model.Tape;
 
@@ -42,19 +47,30 @@ public class BpController {
 
     public BpController(String domain_name, boolean ignore_ssl) {
         pearl = new BpConnector(domain_name, ignore_ssl);
+        
+        log.info("Initializing application without configured defaults.");
         this.defaults = new DefaultsConfig();
     }
 
     public BpController(String domain_name, boolean ignore_ssl, String file_path) {
         pearl = new BpConnector(domain_name, ignore_ssl);
+
+        log.info("Initialzing application with defaults located at " + file_path);
         loadConfig(file_path);
     }
 
     public BpController(String domain_name, boolean ignore_ssl, DefaultsConfig defaults) {
         pearl = new BpConnector(domain_name, ignore_ssl);
+
+        log.info("Initializing application with specified defaults.");
         this.defaults = defaults;
     }
 
+    //===========================================
+    // Getters
+    //===========================================
+    public boolean getConnectionStatus() { return pearl.getConnectionStatus(); } 
+    
     //===========================================
     // Commands
     //===========================================
@@ -75,6 +91,14 @@ public class BpController {
         return ConfigureBlackPearl.fromObject(bpconfig, defaults, pearl);  
     }
 
+    public NtpSettings getNtpSettings() {
+        return ListNtpServers.getSettings(pearl);
+    }
+
+    public SmtpSettings getSmtpSettings() {
+        return GetSmtpSettings.getSettings(pearl);
+    }
+
     public ArrayList<Ds3Bucket> listBuckets() {
         return ListBuckets.all(pearl);
     }
@@ -88,11 +112,23 @@ public class BpController {
     }
 
     public ArrayList<DiskDrive> listDiskDrivesAvailable() {
-        return ListDiskDrives.available(pearl);
+        return ListDiskDrives.availableData(pearl);
     }
 
     public ArrayList<DiskPartition> listDs3DiskPartitions() {
         return ListDs3DiskPartitions.all(pearl);
+    }
+
+    public ArrayList<NetworkInterface> listNetworkInterfacesAll() {
+        return ListNetworkInterfaces.all(pearl);
+    }
+
+    public ArrayList<NetworkInterface> listNetworkInterfacesManagement() {
+        return ListNetworkInterfaces.management(pearl);
+    }
+
+    public ArrayList<BlackPearlNode> listNodes() {
+        return ListNodes.all(pearl);
     }
 
     public ArrayList<Pool> listPools() {
@@ -123,6 +159,10 @@ public class BpController {
         return ListUsers.all(pearl);
     }
 
+    public ArrayList<ActivationKeyConfig> loadActivationKeys(String file_path) {
+        return LoadActivationKeys.fromFile(file_path);
+    }
+
     public boolean login(String username, String password) {
         log.info("Attempting to log into the BlackPearl with username [" + username + "]");
 
@@ -148,6 +188,14 @@ public class BpController {
         return response;
     }
 
+    public boolean setHostname(String hostname) {
+        return SetHostname.fromString(hostname, pearl);
+    }
+
+    public NtpSettings setNtpServers(String server1, String server2) {
+        return UpdateNtpServers.setServers(server1, server2, pearl);
+    }
+
     //===========================================
     // Private Function
     //===========================================
@@ -167,6 +215,12 @@ public class BpController {
             e.printStackTrace();
             throw new RuntimeException("Failed to load configuration file", e);
         }
+    }
+
+    public void updateConfig(DefaultsConfig config) {
+        log.info("Updating default settings configuration.");
+
+        this.defaults = config;
     }
 }
 

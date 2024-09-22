@@ -187,6 +187,7 @@ public class CreatePool {
         // triage the pool type to determine the correct API call
         switch(pool.getType()) {
             case "nas":
+            case "pool":
                 return createNasPool(pool, pearl);
             case "Nearline":
             case "nearline":

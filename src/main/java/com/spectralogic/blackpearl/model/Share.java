@@ -31,8 +31,8 @@ public class Share {
     private String status;
     private boolean readonly;
     //=== NFS Specific ===
-    @SerializedName("access_control")
-    private String access_control;
+    @SerializedName("accessControl")
+    private String accessControl;
     private String comment;
 
     //===========================================
@@ -73,7 +73,7 @@ public class Share {
     public String getId() { return id; }
     public String getMountPoint() { return mount_point; }
     public String getStatus() { return status; }
-    public String getAccessControl() { return access_control; }
+    public String getAccessControl() { return accessControl; }
     public String getComment() { return comment; }
     public boolean isReadonly() { return readonly; }
 
@@ -90,7 +90,7 @@ public class Share {
     public void setId(String id) { this.id = id; }
     public void setMountPoint(String mount_point) { this.mount_point = mount_point; }
     public void setStatus(String status) { this.status = status; }
-    public void setAccessControl(String access) { this.access_control = access; }
+    public void setAccessControl(String access) { this.accessControl = access; }
     public void setComment(String comment) { this.comment = comment; }
     public void setReadonly(boolean readonly) { this.readonly = readonly; }
 }

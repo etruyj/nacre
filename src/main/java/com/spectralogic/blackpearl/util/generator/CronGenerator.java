@@ -59,51 +59,51 @@ public class CronGenerator {
     }
 
     private static String convertDaysToCron(List<String> days) throws Exception {
-        String cdays = "?";
+        String cdays = "";
 
         if(days == null || days.size() == 0) {
             // no days specified. Execute on Sundays
-            cdays = "1";
+            cdays = "0";
         } else if(days.size() == 7) {
             // Assume all valid inputs and 7 days selected.
             cdays = "*";
         } else if(days.size() < 7 && days.size() > 0) {
             for(String day : days) {
                 switch(day.toLowerCase()) {
-                    case "saturday":
-                    case "sat":
-                    case "sa":
-                        cdays += "0";
-                        break;
                     case "sunday":
                     case "sun":
                     case "su":
-                        cdays += "1";
+                        cdays += "0";
                         break;
                     case "monday":
                     case "mon":
                     case "m":
-                        cdays += "2";
+                        cdays += "1";
                         break;
                      case "tuesday":
                      case "tues":
                      case "tu":
-                        cdays += "3";
+                        cdays += "2";
                         break;
                      case "wednesday":
                      case "weds":
                      case "w":
-                        cdays += "4";
+                        cdays += "3";
                         break;
                      case "thursday":
                      case "thurs":
                      case "th":
-                        cdays += "5";
+                        cdays += "4";
                         break;
                      case "friday":
                      case "fri":
                      case "f":
-                        cdays += "6";
+                        cdays += "5";
+                        break;
+                    case "saturday":
+                    case "sat":
+                    case "sa":
+                        cdays += "6,";
                         break;
                      default:
                         throw new Exception("Cannot parse day [" + day + "].");
@@ -116,9 +116,9 @@ public class CronGenerator {
             throw new Exception("Invalid number of days selected.");
         }
  
-        if(cdays.length() > 1) {       
-            if(cdays.substring(cdays.length()-2, cdays.length()-1).equals(",")) {
-                cdays = cdays.substring(0, cdays.length()-2);
+        if(cdays.length() > 1) {
+            if(cdays.substring(cdays.length()-1, cdays.length()).equals(",")) {
+                cdays = cdays.substring(0, cdays.length()-1);
             }
         }
 

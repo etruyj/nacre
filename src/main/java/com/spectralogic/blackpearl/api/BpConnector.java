@@ -11,17 +11,23 @@
 package com.spectralogic.blackpearl.nacre.api;
 
 import com.spectralogic.blackpearl.nacre.model.ActivationKey;
+import com.spectralogic.blackpearl.nacre.model.BlackPearlNode;
 import com.spectralogic.blackpearl.nacre.model.Ds3Bucket;
 import com.spectralogic.blackpearl.nacre.model.Ds3User;
 import com.spectralogic.blackpearl.nacre.model.DataPersistenceRule;
 import com.spectralogic.blackpearl.nacre.model.DataPolicy;
 import com.spectralogic.blackpearl.nacre.model.DiskDrive;
 import com.spectralogic.blackpearl.nacre.model.DiskPartition;
+import com.spectralogic.blackpearl.nacre.model.NetworkInterface;
+import com.spectralogic.blackpearl.nacre.model.NetworkInterfaceSend;
+import com.spectralogic.blackpearl.nacre.model.NtpSettings;
 import com.spectralogic.blackpearl.nacre.model.Pool;
 import com.spectralogic.blackpearl.nacre.model.ScheduleDatabaseBackup;
+import com.spectralogic.blackpearl.nacre.model.ScheduleLogSet;
 import com.spectralogic.blackpearl.nacre.model.Service;
 import com.spectralogic.blackpearl.nacre.model.ServiceS3;
 import com.spectralogic.blackpearl.nacre.model.Share;
+import com.spectralogic.blackpearl.nacre.model.SmtpSettings;
 import com.spectralogic.blackpearl.nacre.model.StorageDomain;
 import com.spectralogic.blackpearl.nacre.model.StorageDomainMember;
 import com.spectralogic.blackpearl.nacre.model.Tape;
@@ -55,6 +61,16 @@ public class BpConnector {
         }
     }
 
+    //===========================================
+    // Getters
+    //===========================================
+    public boolean getConnectionStatus() { 
+        if(token != null && token.length() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     public String getDomainName() { return domain_name; }
 
     //===========================================
@@ -79,6 +95,10 @@ public class BpConnector {
 
     public DiskPartition createDs3DiskPartition(DiskPartition par) throws IOException, JsonParseException {
         return Ds3DiskPartitions.create(par, domain_name, token, rest_client);
+    }
+
+    public NetworkInterface createNetworkInterface(NetworkInterfaceSend interf) throws IOException, JsonParseException {
+        return NetworkInterfaces.create(interf, domain_name, token, rest_client);
     }
 
     public Pool createDs3Pool(Pool pool) throws IOException, JsonParseException {
@@ -117,6 +137,10 @@ public class BpConnector {
         return Ds3Pools.get(pool_id, domain_name, token, rest_client);
     }
 
+    public SmtpSettings getSmtpSettings() throws IOException, JsonParseException {
+        return SmtpServer.get(domain_name, token, rest_client);
+    }
+
     public ArrayList<ActivationKey> listActivationKeys() throws IOException, JsonParseException {
         return ActivationKeys.list(domain_name, token, rest_client);
     }
@@ -141,6 +165,18 @@ public class BpConnector {
         return Ds3DiskPartitions.list(domain_name, token, rest_client);
     }
 
+    public ArrayList<NetworkInterface> listNetworkInterfaces() throws IOException, JsonParseException {
+        return NetworkInterfaces.list(domain_name, token, rest_client);
+    }
+
+    public ArrayList<BlackPearlNode> listNodes() throws IOException, JsonParseException {
+        return Nodes.list(domain_name, token, rest_client);
+    }
+
+    public ArrayList<NtpSettings> listNtpServers() throws IOException, JsonParseException {
+        return NtpServers.list(domain_name, token, rest_client);
+    }
+    
     public ArrayList<Pool> listPools() throws IOException, JsonParseException {
         return Pools.list(domain_name, token, rest_client);
     }
@@ -183,7 +219,27 @@ public class BpConnector {
         }
     }
 
+    public ScheduleLogSet setLogSchedule(ScheduleLogSet schedule) throws IOException, JsonParseException {
+        return LogSchedules.put(schedule, domain_name, token, rest_client);
+    }
+
     public ScheduleDatabaseBackup updateBackupSchedule(ScheduleDatabaseBackup schedule) throws IOException, JsonParseException {
         return DatabaseBackups.updateSchedule(schedule, domain_name, token, rest_client);
+    }
+
+    public NetworkInterface updateNetworkInterface(NetworkInterfaceSend interf) throws IOException, JsonParseException {
+        return NetworkInterfaces.put(interf, domain_name, token, rest_client);
+    }
+
+    public BlackPearlNode updateNode(BlackPearlNode node) throws IOException, JsonParseException {
+        return Nodes.update(node, domain_name, token, rest_client);
+    }
+
+    public NtpSettings updateNtpServers(NtpSettings settings) throws IOException, JsonParseException {
+        return NtpServers.update(settings, domain_name, token, rest_client);
+    }
+
+    public SmtpSettings updateSmtpSettings(SmtpSettings settings) throws IOException, JsonParseException {
+        return SmtpServer.update(settings, domain_name, token, rest_client);
     }
 }

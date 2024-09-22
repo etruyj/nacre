@@ -12,6 +12,7 @@ package com.spectralogic.blackpearl.nacre.api;
 
 import com.spectralogic.vail.vapir.util.http.RestClient;
 import com.spectralogic.blackpearl.nacre.model.ApiDataResponse;
+import com.spectralogic.blackpearl.nacre.model.ApiErrorResponse;
 import com.spectralogic.blackpearl.nacre.model.ActivationKey;
 
 import com.google.gson.Gson;
@@ -43,6 +44,9 @@ public class ActivationKeys {
         ActivationKey new_key =  gson.fromJson(response, ActivationKey.class);
 
         if(response.contains("errors")) {
+            ApiErrorResponse errors = gson.fromJson(response, ApiErrorResponse.class);
+
+            errors.throwErrors();
             return null; 
         } else {
             return new_key;

@@ -9,9 +9,13 @@
 
 package com.spectralogic.blackpearl.nacre.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class StorageDomainMemberConfig extends StorageDomainMember {
     private String partition;
+    @SerializedName("tape_partition")
     private String tapePartition;
+    @SerializedName("disk_partition")
     private String diskPartition;
 
     //===========================================

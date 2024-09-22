@@ -18,7 +18,7 @@ public class ActivationKeyConfig {
     private String key;
     private String name;
     private boolean restart_required;
-    private int load_order;
+    private Integer load_order;
 
     //===========================================
     // Getters
@@ -26,7 +26,7 @@ public class ActivationKeyConfig {
     public String getKey() { return key; }
     public String getName() { return name; }
     public boolean isRestartRequired() { return restart_required; }
-    public int getLoadOrder() { return load_order; }
+    public Integer getLoadOrder() { return load_order; }
 
     //===========================================
     // Getters
@@ -34,5 +34,5 @@ public class ActivationKeyConfig {
     public void setKey(String key) { this.key = key; }
     public void setName(String name) { this.name = name; }
     public void setRestartRequired(boolean restart) { this.restart_required = restart; }
-    public void setLoadOrder(int order) { this.load_order = order; }
+    public void setLoadOrder(Integer order) { this.load_order = order; }
 }

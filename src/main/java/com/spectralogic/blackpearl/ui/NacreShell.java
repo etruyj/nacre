@@ -44,19 +44,35 @@ public class NacreShell {
                 case "configure":
                     conn.configureFromFile(aparser.getRequiredValue("file"));
                     break;
+                case "list-available-drives":
+                    conn.listDiskDrivesAvailable();
+                    break;
                 case "list-data-policies":
                     conn.listDataPolicies();
                     break;
+                case "list-nodes":
+                    conn.listNodes();
+                    break;
                 case "list-services":
                     conn.listServices();
+                    break;
+                case "load-keys":
+                    conn.loadActivationKeys(aparser.getRequiredValue("file"));
                     break;
                 case "set-backup-schedule":
                     conn.setBackupSchedule(aparser.getRequiredValue("schedule"), 
                                             aparser.getRequiredValue("time"),
                                             Integer.valueOf(aparser.getRequiredValue("keep-copies")));
                     break;
+                case "set-hostname":
+                    conn.setHostname(aparser.getRequiredValue("name"));
+                    break;
+                case "set-ntp":
+                case "set-ntp-servers":
+                    conn.setNtpServers(aparser.getValue("server1"), aparser.getValue("server2"));
+                    break;
                 case "test":
-//                    conn.addActivationKey();
+                    conn.listTapesByBucket();
                     break;
                 default:
                     System.err.println("Invalid command [" + aparser.getRequiredValue("command") + "] selected.");

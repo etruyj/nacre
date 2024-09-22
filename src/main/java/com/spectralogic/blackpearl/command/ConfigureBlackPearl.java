@@ -14,6 +14,9 @@ import com.spectralogic.blackpearl.nacre.api.BpConnector;
 import com.spectralogic.blackpearl.nacre.model.ActivationKey;
 import com.spectralogic.blackpearl.nacre.model.ActivationKeyConfig;
 import com.spectralogic.blackpearl.nacre.model.BpConfig;
+import com.spectralogic.blackpearl.nacre.model.Ds3Bucket;
+import com.spectralogic.blackpearl.nacre.model.Ds3BucketConfig;
+import com.spectralogic.blackpearl.nacre.model.Ds3User;
 import com.spectralogic.blackpearl.nacre.model.DataPersistenceRule;
 import com.spectralogic.blackpearl.nacre.model.DataPersistenceRuleConfig;
 import com.spectralogic.blackpearl.nacre.model.DataPolicy;
@@ -21,13 +24,22 @@ import com.spectralogic.blackpearl.nacre.model.DataPolicyConfig;
 import com.spectralogic.blackpearl.nacre.model.DefaultsConfig;
 import com.spectralogic.blackpearl.nacre.model.DiskDrive;
 import com.spectralogic.blackpearl.nacre.model.DiskPartition;
+import com.spectralogic.blackpearl.nacre.model.NetworkInterface;
+import com.spectralogic.blackpearl.nacre.model.NetworkInterfaceConfig;
+import com.spectralogic.blackpearl.nacre.model.NetworkInterfaceSend;
+import com.spectralogic.blackpearl.nacre.model.NtpSettings;
 import com.spectralogic.blackpearl.nacre.model.Pool;
 import com.spectralogic.blackpearl.nacre.model.PoolConfig;
+import com.spectralogic.blackpearl.nacre.model.ScheduleDatabaseBackup;
+import com.spectralogic.blackpearl.nacre.model.ScheduleDatabaseConfig;
+import com.spectralogic.blackpearl.nacre.model.ScheduleLogConfig;
+import com.spectralogic.blackpearl.nacre.model.ScheduleLogSet;
 import com.spectralogic.blackpearl.nacre.model.Service;
 import com.spectralogic.blackpearl.nacre.model.ServiceCifs;
 import com.spectralogic.blackpearl.nacre.model.ServiceNfs;
 import com.spectralogic.blackpearl.nacre.model.Share;
 import com.spectralogic.blackpearl.nacre.model.ShareConfig;
+import com.spectralogic.blackpearl.nacre.model.SmtpSettings;
 import com.spectralogic.blackpearl.nacre.model.StorageDomain;
 import com.spectralogic.blackpearl.nacre.model.StorageDomainConfig;
 import com.spectralogic.blackpearl.nacre.model.StorageDomainMember;
@@ -40,11 +52,13 @@ import com.spectralogic.blackpearl.nacre.model.VolumeConfig;
 import com.spectralogic.blackpearl.nacre.util.convert.StorageConversion;
 import com.spectralogic.blackpearl.nacre.util.io.LoadFile;
 import com.spectralogic.blackpearl.nacre.util.json.StringOrArrayDeserializer;
+import com.spectralogic.blackpearl.nacre.util.map.MapDataPolicies;
 import com.spectralogic.blackpearl.nacre.util.map.MapDiskPartitions;
 import com.spectralogic.blackpearl.nacre.util.map.MapNasPools;
 import com.spectralogic.blackpearl.nacre.util.map.MapServices;
 import com.spectralogic.blackpearl.nacre.util.map.MapStorageDomains;
 import com.spectralogic.blackpearl.nacre.util.map.MapTapePartitions;
+import com.spectralogic.blackpearl.nacre.util.map.MapUsers;
 import com.spectralogic.blackpearl.nacre.util.map.MapVolumes;
 
 import com.google.gson.Gson;
@@ -87,6 +101,7 @@ public class ConfigureBlackPearl {
         ArrayList<String> results = new ArrayList<String>();
         int success = 0;
         String message = "";
+
         //=======================================
         // Add Activation Keys
         //=======================================
@@ -94,8 +109,10 @@ public class ConfigureBlackPearl {
         ArrayList<ActivationKeyConfig> new_keys = config.getActivationKeys() != null ? config.getActivationKeys() : new ArrayList<ActivationKeyConfig>();
         
         if(new_keys.size() > 0) {
+            System.out.println("Adding activation keys to BlackPearl....");
             success = addActivationKeys(new_keys, defaults, pearl);
             message = "Successfully added " + success + "/" + new_keys.size()  + " activation keys";
+            System.out.println(message);
             results.add(message);
         }
 
@@ -106,8 +123,10 @@ public class ConfigureBlackPearl {
         ArrayList<PoolConfig> new_pools = config.getNasPools() != null ? config.getNasPools() : new ArrayList<PoolConfig>();
         
         if(new_pools.size() > 0) {
+            System.out.println("Creating NAS pools...");
             success = createPools(new_pools, defaults, pearl);
             message = "Successfully created " + success + "/" + new_pools.size()  + " pools";
+            System.out.println(message);
             results.add(message);
         }
 
@@ -118,8 +137,10 @@ public class ConfigureBlackPearl {
         ArrayList<VolumeConfig> new_volumes = config.getVolumes() != null ? config.getVolumes() : new ArrayList<VolumeConfig>();
         
         if(new_volumes.size() > 0) {
+            System.out.println("Creating volumes...");
             success = createVolumes(new_volumes, defaults, pearl);
             message = "Successfully created " + success + "/" + new_volumes.size()  + " volumes";
+            System.out.println(message);
             results.add(message);
         }
 
@@ -131,8 +152,10 @@ public class ConfigureBlackPearl {
         ArrayList<ShareConfig> new_shares = config.getCifsShares() != null ? config.getCifsShares() : new ArrayList<ShareConfig>();
         
         if(new_shares.size() > 0) {
+            System.out.println("Configuring CIFS shares...");
             success = createShares(new_shares, "CIFS", defaults, pearl);
             message = "Successfully created " + success + "/" + new_shares.size()  + " CIFS shares";
+            System.out.println(message);
             results.add(message);
         }
 
@@ -140,8 +163,10 @@ public class ConfigureBlackPearl {
         new_shares = config.getNfsShares() != null ? config.getNfsShares() : new ArrayList<ShareConfig>();
         
         if(new_shares.size() > 0) {
+            System.out.println("Configuring NFS shares...");
             success = createShares(new_shares, "NFS", defaults, pearl);
             message = "Successfully created " + success + "/" + new_shares.size()  + " NFS shares";
+            System.out.println(message);
             results.add(message);
         }
 
@@ -151,8 +176,9 @@ public class ConfigureBlackPearl {
         // Copy to a new list to allow for empty sets in the configuration.
         ArrayList<PoolConfig> new_ds3_pars = config.getDiskPartitions() != null ? config.getDiskPartitions() : new ArrayList<PoolConfig>();
         if(new_ds3_pars.size() > 0) {
+            System.out.println("Configuring DS3 disk partitions...");
             success = createDs3DiskPartitions(new_ds3_pars, defaults, pearl);
-            message = "Successfully created " + success + "/" + new_pools.size()  + " disk partitions";
+            message = "Successfully created " + success + "/" + new_ds3_pars.size()  + " disk partitions";
             results.add(message);
         }
 
@@ -163,6 +189,7 @@ public class ConfigureBlackPearl {
         ArrayList<StorageDomainConfig> new_domains = config.getStorageDomains() != null ? config.getStorageDomains() : new ArrayList<StorageDomainConfig>();
         
         if(new_domains.size() > 0) {
+            System.out.println("Configuring storage domains...");
             success = createStorageDomains(new_domains, defaults, pearl);
             message = "Successfully created " + success + "/" + new_domains.size()  + " storage domains";
             results.add(message);
@@ -175,10 +202,142 @@ public class ConfigureBlackPearl {
         ArrayList<DataPolicyConfig> new_policies = config.getDataPolicies() != null ? config.getDataPolicies() : new ArrayList<DataPolicyConfig>();
         
         if(new_policies.size() > 0) {
+            System.out.println("Configuring data policies...");
             success = createDataPolicies(new_policies, defaults, pearl);
             message = "Successfully created " + success + "/" + new_policies.size() + " data policies";
             results.add(message);
         }
+
+        //=======================================
+        // Create Buckets
+        //=======================================
+        // Copy to a new list to allow for empty sets in the configuration
+        ArrayList<Ds3BucketConfig> new_buckets = config.getBuckets() != null ? config.getBuckets() : new ArrayList<Ds3BucketConfig>();
+        
+        if(new_buckets.size() > 0) {
+            System.out.println("Configuring DS3 buckets...");
+            success = createBuckets(new_buckets, defaults, pearl);
+            message = "Successfully created " + success + "/" + new_buckets.size() + " buckets";
+            results.add(message);
+        }
+
+        //=======================================
+        // Configure Database Backups
+        //=======================================
+        // Configure the database backup and set the backup schedule.
+        ScheduleDatabaseConfig backup_schedule = config.getDatabaseBackup() != null ? config.getDatabaseBackup() : new ScheduleDatabaseConfig();
+
+        if(configureDatabaseBackups(backup_schedule, defaults, pearl)) {
+            message = "Successfully configured database backup schedule.";
+        } else {
+            message = "Failed to configure database backup scheduel.";
+        }
+
+        results.add(message);
+
+        //=======================================
+        // Configure Log Set Schedule
+        //=======================================
+        ScheduleLogConfig log_schedule = config.getLogSchedule() != null ? config.getLogSchedule() : defaults.getLogSchedule();
+
+        if(log_schedule != null) {
+            System.out.println("Configuring log set schedule...");
+            if(ScheduleLogs.fromConfig(log_schedule, pearl) != null) {
+                message = "Successfully configured log set schedule.";
+            } else {
+                message = "Failed to configure log set schedule.";
+            }
+        
+            results.add(message);
+        }
+
+
+        //=======================================
+        // Set Hostname
+        //=======================================
+        if(config.getHostname() != null) {
+            System.out.println("Configuring hostname...");
+            if(SetHostname.fromString(config.getHostname(), pearl)) {
+                message = "Successfully set hostname [" + config.getHostname() + "]";
+            } else {
+                message = "Failed to set hostname [" + config.getHostname() + "].";
+            }
+        
+            results.add(message);
+        }
+
+
+        //=======================================
+        // Set DNS Servers
+        //=======================================
+        List<String> dns_servers = config.getDnsServers() != null ? config.getDnsServers() : new ArrayList<String>();
+
+        if(dns_servers.size() > 0 || defaults.getDnsServers() != null) {
+            System.out.println("Configuing DNS servers...");
+            if(setDnsServers(dns_servers, defaults.getDnsServers(), pearl)) {
+                message = "Successfully configured DNS servers.";
+            } else {
+                message = "Failed to configure DNS servers.";
+            }
+        
+            results.add(message);
+        }
+
+
+        //=======================================
+        // Set NTP Servers
+        //=======================================
+        List<String> ntp_servers = config.getNtpServers() != null ? config.getNtpServers() : new ArrayList<String>();
+
+        if(ntp_servers.size() > 0 || defaults.getNtpServers() != null) {
+            System.out.println("Configuring NTP servers...");
+            if(setNtpServers(ntp_servers, defaults.getNtpServers(), pearl)) {
+                message = "Successfully configured NTP servers.";
+            } else {
+                message = "Failed to configure NTP servers.";
+            }
+        
+            results.add(message);
+        }
+        
+
+        //=======================================
+        // Set SMTP Servers
+        //=======================================
+        SmtpSettings smtp_settings = config.getSmtpSettings() != null ? config.getSmtpSettings() : null;
+
+        if(smtp_settings != null || defaults.getSmtpSettings() != null) {
+            System.out.println("Configuring SMTP server...");
+            if(setSmtpSettings(smtp_settings, defaults.getSmtpSettings(), pearl)) {
+                message = "Successfully configured SMTP settings.";
+            } else {
+                message = "Failed to configure SMTP settings.";
+            }
+        
+            results.add(message);
+        }
+
+
+        //=======================================
+        // Set Data Interface
+        //=======================================
+        NetworkInterfaceConfig data_interface = config.getDataInterface() != null ? config.getDataInterface() : null;
+
+        if(data_interface != null) {
+
+        } else {
+            message = "No configuration information for BlackPearl data interface.";
+        }
+
+        //results.add(message);
+
+        //=======================================
+        // Set Management Interface
+        //=======================================
+        // Do this last in case it severs connection
+        // to the server.
+
+        System.out.println("BlackPearl configuration is complete.");
 
         return results;
     }
@@ -192,7 +351,54 @@ public class ConfigureBlackPearl {
         int success = 0;
         ActivationKey new_key = null;
 
+        //==== Sort the Activation Keys ====
+        // Some keys need to be entered in a
+        // specific order. Create a sorted list of the keys.
+        ArrayList<ActivationKeyConfig> unsorted_list = new ArrayList<ActivationKeyConfig>();
+        ArrayList<ActivationKeyConfig> sorted_list = new ArrayList<ActivationKeyConfig>();
+        boolean key_added = false;
+        int iterator = 0;
+
         for(ActivationKeyConfig key : key_list) {
+            if(defaults.getServer().getKeySettings().get(key.getName()) != null 
+                    && defaults.getServer().getKeySettings().get(key.getName()).getLoadOrder() != null) {
+                // Add the key to the list if no other keys exist.
+                key_added = false; // reset the flag
+                key.setLoadOrder(defaults.getServer().getKeySettings().get(key.getName()).getLoadOrder());
+                log.debug("Key " + key.getName() + " [" + key.getKey() + "] has a specific load order. Queuing at end of list.");
+
+                if(sorted_list.size() == 0) {
+                    log.debug("Starting new list for specific keys.");
+                    sorted_list.add(key);
+                } else {
+                    // reset the iterator and search the list for the place to insert
+                    // the key.
+                    iterator = sorted_list.size()-1;
+                    
+                    while(!key_added && iterator >= 0) {
+                        if(key.getLoadOrder() > sorted_list.get(iterator).getLoadOrder()) {
+                            log.debug("Adding key at position " + (iterator + 1) + " of the load order.");
+                            sorted_list.add(iterator+1, key);
+                            key_added = true;
+                        }
+
+                        iterator--;
+                    }
+                }
+            } else {
+                unsorted_list.add(key);
+            }
+        }
+
+        // Add the sorted list to the end of the unsorted list.
+        // this allows the generic keys to be added first.
+        log.debug("Adding (" + sorted_list.size() + ") ordered keys to the end of the list.");
+        unsorted_list.addAll(sorted_list);
+        log.debug("There are (" + unsorted_list.size() + ") activation keys to load onto the BlackPearl.");
+        
+
+        //==== Add they keys to the BlackPearl ===
+        for(ActivationKeyConfig key : unsorted_list) {
             new_key = AddActivationKey.fromObject(key, defaults, pearl);
 
             if(new_key != null) {
@@ -202,6 +408,8 @@ public class ConfigureBlackPearl {
         
         log.info("Successfully added " + success + " activation keys.");
         log.info("Failed to add " + (key_list.size() - success) + "/" + key_list.size() + " activation keys.");
+
+        waitForDs3BackendToComeOnline(defaults.getServer().getPingInterval(), pearl);
 
         return success;
     }
@@ -264,8 +472,10 @@ public class ConfigureBlackPearl {
         StorageDomainMember new_member = null;
         StorageDomainMember nm_iter = null;
         // build a list of stroage domain members to add.
+        for(String key : disk_map.keySet()) { System.out.println("STring: " + key); }
+        
         for(StorageDomainMemberConfig member : domain.getMembers()) {
-            log.info("Member partition: " + member.getPartition());
+            log.info("Member tape partition: [" + member.getTapePartition() + "]  Member disk Partition: [" + member.getDiskPartition() + "]");
 
             new_member = new StorageDomainMember(defaults.getStorageDomainMember());
 
@@ -274,11 +484,113 @@ public class ConfigureBlackPearl {
             }
 
             if(member.getAutoCompactionThreshold() != null) {
-                System.err.println("Setting auto compaction threshold.");
+                log.info("Setting auto compaction threshold.");
                 new_member.setAutoCompactionThreshold(member.getAutoCompactionThreshold());
             }
             new_member.setStorageDomainId(domain.getId());
 
+            // Find the storage domain members
+            // Check for disk partition members independently from the tape partition members
+            // as the tape partition and partition field point to the same value.
+            if(member.getDiskPartition() != null) {
+                // Set disk partition values
+                // auto_compaction_threshold and tape_type must by ""
+                new_member.setAutoCompactionThreshold(null);
+                new_member.setTapeType("");
+
+                if(member.getDiskPartition().equalsIgnoreCase("all")) {
+                    if(disk_map.size() > 0) {
+                        log.info("Adding all disk partitions to storage domain.");
+
+                        for(String key : disk_map.keySet()) {
+                            new_member = new StorageDomainMember(new_member); // Create a new copy due to Java referencing behavior.
+                            new_member.setPoolPartitionId(disk_map.get(key).getId());
+
+                            member_list.add(new_member);
+                        }
+                    } else {
+                        throw new Exception("Unable to add disk partition to storage domain. No disk partitions exists.");
+                    }
+                } else {
+                    if(disk_map.get(member.getDiskPartition()) != null) {
+                        log.info("Adding " + member.getDiskPartition() + " as storage domain member.");
+                        new_member.setPoolPartitionId(disk_map.get(member.getDiskPartition()).getId());
+
+                        member_list.add(new_member);
+                    } else {
+                        throw new Exception("Unable to add disk partition to storage domain. Disk partition [" + member.getDiskPartition() + "] does not exist.");
+                    }
+                }
+            } else if(member.getTapePartition() != null) {
+                if(member.getTapePartition().equalsIgnoreCase("all")) {
+                    if(par_map.size() > 0) {
+                        log.info("Adding all tape partitions to storage domain.");
+
+                        for(String key : par_map.keySet()) {
+                            new_member = new StorageDomainMember(new_member); // Create a copy due to Java referencing behavior
+                            new_member.setTapePartitionId(par_map.get(key).getId());
+                            
+                            // Determine tape types
+                            // If tape type is all or omitted, all tapes should be added.
+                            if(member.getTapeType() == null || member.getTapeType().equalsIgnoreCase("all")) {
+                                log.info("Adding all type types to the storage domain.");
+
+                                for(String tape_type : par_map.get(key).getTapeTypes()) {
+                                    // Create another copy of the new_member on each loop iteration
+                                    // due to Java's referencing behavior
+                                    new_member = new StorageDomainMember(new_member);
+                                    new_member.setTapeType(tape_type);
+
+                                    member_list.add(new_member);
+                                }
+                            } else {
+                                log.info("Adding " + member.getTapeType() + " media to the storage domain.");
+                                new_member.setTapeType(member.getTapeType());
+
+                                member_list.add(new_member);
+                            }
+
+                            member_list.add(new_member);        
+                        }
+                    } else {
+                        throw new Exception("Unable to add tape partition to storage domain. No tape partitions exists.");
+                    }
+                } else {
+                    if(par_map.get(member.getTapePartition()) != null) {
+                        log.info("Adding tape partition [" + member.getTapePartition() + "] to the storage domain.");
+
+                        new_member.setTapePartitionId(par_map.get(member.getTapePartition()).getId());
+
+                        // Determine tape types
+                        // If tape type is all or omitted, all tapes should be added.
+                        if(member.getTapeType() == null || member.getTapeType().equalsIgnoreCase("all")) {
+                            log.info("Adding all type types to the storage domain.");
+
+                            for(String tape_type : par_map.get(member.getTapePartition()).getTapeTypes()) {
+                                // Create another copy of the new_member on each loop iteration
+                                // due to Java's referencing behavior
+                                new_member = new StorageDomainMember(new_member);
+                                new_member.setTapeType(tape_type);
+
+                                member_list.add(new_member);
+                            }
+                        } else {
+                            log.info("Adding " + member.getTapeType() + " media to the storage domain.");
+                            new_member.setTapeType(member.getTapeType());
+
+                            member_list.add(new_member);
+                        }
+
+                        member_list.add(new_member);        
+                    } else {
+                        throw new Exception("Unable to add tape partition to storage domain. Tape partition [" + member.getTapePartition() + "] does not exist.");
+                    }
+                }
+            } 
+        }    
+            /* Removed by the if-else-if statements above when 
+               * disk partitions support was added.
+               * saving until we verify this works.
             if(member.getTapePartition().equalsIgnoreCase("all")) {
                 // Add all tape partitions as storage domain members.
                 log.info("Adding all tape partitions to the storage domain.");
@@ -326,6 +638,8 @@ public class ConfigureBlackPearl {
                 }
             }
         }
+        * END OF REMOVED CODE
+        */
 
         // Add the storage domain members for the storage domain.
         for(StorageDomainMember nm : member_list) {
@@ -340,6 +654,200 @@ public class ConfigureBlackPearl {
         return success;
     }
 
+    public static boolean configureDatabaseBackups(ScheduleDatabaseConfig backup_schedule, DefaultsConfig defaults, BpConnector pearl) {
+        log.info("Configuring database backups");
+
+        // Configure Database Backup
+
+        ScheduleDatabaseConfig schedule = new ScheduleDatabaseConfig(defaults.getDatabaseBackup());
+
+        if(backup_schedule.getSchedule() != null) {
+            schedule.setSchedule(backup_schedule.getSchedule());
+        }
+
+        if(backup_schedule.getTime() != null) {
+            schedule.setTime(backup_schedule.getTime());
+        }
+
+        if(backup_schedule.getCopiesToKeep() != null) {
+            schedule.setCopiesToKeep(backup_schedule.getCopiesToKeep());
+        }
+
+        if(backup_schedule.getDays() != null && backup_schedule.getDays().size() > 1) {
+            schedule.setDays(backup_schedule.getDays());
+        }
+
+        if(backup_schedule.getDataPolicy() != null) {
+            schedule.setDataPolicy(backup_schedule.getDataPolicy());
+        }
+
+        //=======================================
+        // Create Database Backup Bucket
+        //=======================================
+        
+        CreateDs3Bucket.forDatabase(schedule.getDataPolicy(), pearl);
+   
+        //=======================================
+        // Create Database Backup Schedule
+        //=======================================
+        
+        ScheduleDatabaseBackup new_schedule = ScheduleBackup.fromConfig(schedule, pearl);
+
+        if(new_schedule != null) {
+            log.info("Successfully configured database backups.");
+            return true;
+        } else {
+            log.warn("Failed to configure database backups.");
+            return false;
+        }
+    }
+
+    public static String configureNetworkInterface(NetworkInterfaceConfig inter_conf, String type, BpConnector pearl) {
+        log.info("Configuring the " + type + " interface to " + inter_conf.getAddress() + "/" + inter_conf.getPrefix());
+
+        ArrayList<NetworkInterface> interface_list = ListNetworkInterfaces.activeByType(type, pearl);
+        NetworkInterfaceSend new_interface = null;
+
+        String message = "";
+
+        if(interface_list.size() > 1) {
+            log.info("Building aggregate interface for (" + interface_list.size() + ") interfaces.");
+            ArrayList<String> lagg_ports = new ArrayList<String>();
+
+            if(inter_conf.isAggregate()) {
+                new_interface = new NetworkInterfaceSend();
+
+                for(NetworkInterface interf : interface_list) {
+                    lagg_ports.add(interf.getIfname());        
+                }
+
+                new_interface.setAddresses(inter_conf.getAddress() + "/" + inter_conf.getPrefix());
+                new_interface.setDefaultGateway(inter_conf.getDefaultGateway());
+                new_interface.setDhcp(false);
+                new_interface.setLaggPortOptions(false);
+                new_interface.setLaggPorts(lagg_ports);
+                new_interface.setMtu("1500");
+                new_interface.setType("lagg");
+                new_interface.setUp(true);
+            } else {
+                log.warn("Multiple available interfaces found. Configuring the first available.");
+            
+                log.info("Configuring interface " + interface_list.get(0).getName() + " [" + interface_list.get(0).getId() + "]");   
+                new_interface = new NetworkInterfaceSend(interface_list.get(0));
+                
+                new_interface.setAddresses(inter_conf.getAddress() + "/" + inter_conf.getPrefix());
+                new_interface.setDefaultGateway(inter_conf.getDefaultGateway());
+                new_interface.setUp(true);
+            }
+        } else if(interface_list.size() == 1) {
+            if(inter_conf.isAggregate()) {
+                log.warn("Unable to aggregage. Only one interface is available for configuration.");
+            }
+            
+            if(!interface_list.get(0).getAddresses().get(0).getAddress().equals(inter_conf.getAddress() + "/" + inter_conf.getPrefix())) {
+                log.info("Configuring interface " + interface_list.get(0).getName() + " [" + interface_list.get(0).getId() + "]");   
+
+                new_interface = new NetworkInterfaceSend(interface_list.get(0));
+                
+                new_interface.setAddresses(inter_conf.getAddress() + "/" + inter_conf.getPrefix());
+                new_interface.setDefaultGateway(inter_conf.getDefaultGateway());
+                new_interface.setUp(true);
+            } else {
+                // Interface address already matches the desired IP.
+                message = "Interface " + interface_list.get(0).getName() + " already has desired address " + inter_conf.getAddress();
+            }
+        } else {
+            log.warn("No " + type + " interfaces availabe to configure.");
+            message = "Failed to configure " + type + " interface. No interfaces available to configure.";
+        }
+
+        NetworkInterface ret_int = null;
+        if(new_interface != null) {
+            if(new_interface.getType().equals("lagg")) {
+                ret_int = CreateAggregateInterface.fromObject(new_interface, pearl);
+            
+                if(ret_int != null) {
+                    message = "Successfully configured aggregate " + type + " interface: " + ret_int.getName();
+                    log.info(message);
+                } else {
+                    message = "Failed to configure aggregate " + type + " inteface.";
+                    log.error(message);
+                }
+            } else {
+                ret_int = UpdateNetworkInterface.fromObject(new_interface, pearl);
+            
+                if(ret_int != null) {
+                    message = "Successfully configured " + type + " interface: " + ret_int.getName();
+                    log.info(message);
+                } else {
+                    message = "Failed to configure " + type + " inteface.";
+                    log.error(message);
+                }
+            }
+        }
+
+        return message; 
+    }
+
+    public static int createBuckets(ArrayList<Ds3BucketConfig> bucket_list, DefaultsConfig defaults, BpConnector pearl) {
+        log.info("Configuration contains (" + bucket_list.size() + ") DS3 buckets.");
+        int success = 0;
+
+        ArrayList<DataPolicy> policy_list = ListDataPolicies.all(pearl);
+        HashMap<String, String> policy_map = MapDataPolicies.createNameIdMap(policy_list);
+
+        ArrayList<Ds3User> user_list = ListUsers.all(pearl);
+        HashMap<String, String> user_map = MapUsers.createUsernameIdMap(user_list);
+
+        for(Ds3BucketConfig bucket : bucket_list) {
+            try {
+                log.info("Attempting to create bucket [" + bucket.getName() + "] for owner " + bucket.getOwner() + " with data policy " + bucket.getDataPolicy());
+
+                Ds3Bucket new_bucket = new Ds3Bucket(defaults.getDs3Bucket());
+               
+                new_bucket.setName(bucket.getName());
+
+                //=== Assign User ===
+                if(bucket.getOwner() != null) {
+                    new_bucket.setUserId(bucket.getOwner());
+                }
+
+                // Convert the human-readable name to a user id
+                if(user_map.get(new_bucket.getUserId()) != null) {
+                    new_bucket.setUserId(user_map.get(new_bucket.getUserId()));
+                } else {
+                    throw new Exception("User [" + new_bucket.getUserId() + "] does not exist.");
+                }
+
+                //=== Assign Data Policy ===
+                if(bucket.getDataPolicy() != null) {
+                    new_bucket.setDataPolicyId(bucket.getDataPolicy());
+                }
+
+                // Convert the human-readable name to a data policy id
+                if(policy_map.get(new_bucket.getDataPolicyId()) != null) {
+                    new_bucket.setDataPolicyId(policy_map.get(new_bucket.getDataPolicyId()));
+                } else {
+                    throw new Exception("Data policy [" + new_bucket.getDataPolicyId() + "] does not exist.");
+                }
+
+                new_bucket = CreateDs3Bucket.fromObject(new_bucket, pearl);
+
+                if(new_bucket != null) {
+                    success++;
+                }
+
+            } catch(Exception e) {
+                log.error(e.getMessage());
+                log.error("Failed to create bucket [" + bucket.getName() + "]");
+            }
+        }
+
+        log.info("Successfully created (" + success + ") DS3 buckets.");
+        log.info("Failed to create (" + (bucket_list.size() - success) + "/" + bucket_list.size() + ") buckets.");
+
+        return success;
+    }
 
     public static int createDataPolicies(ArrayList<DataPolicyConfig> policy_list, DefaultsConfig defaults, BpConnector pearl) {
         log.info("Configuration file contains (" + policy_list.size() + ") data policies");
@@ -486,7 +994,7 @@ public class ConfigureBlackPearl {
                         log.debug("Adding pool id [" + new_stripe.getId() + "] to DS3 disk partition.");
                         disk_par.addPoolId(new_stripe.getId());
                     } else {
-                        throw new Exception("Failed to create stripei [" + stripe.getName() + "_n" + i + "].");
+                        throw new Exception("Failed to create stripe [" + stripe.getName() + "_n" + i + "].");
                     }
                 }
 
@@ -569,7 +1077,7 @@ public class ConfigureBlackPearl {
                 log.debug("Stripe size: " + stripe_size);
 
                 while(drives_assigned < pool.getDriveCount() && drive_iterator < available_drives.size()) {
-                    log.info("Searching for drive " + drives_assigned + " which belongs to stripe slot " + stripe_counter);
+                    log.debug("Searching for drive " + drives_assigned + " which belongs to stripe slot " + stripe_counter);
                     new_pool.addDiskId(available_drives.get(drive_iterator).getId());
                     pool_total += available_drives.get(drive_iterator).getSize();
 
@@ -658,6 +1166,7 @@ public class ConfigureBlackPearl {
 
             } catch(Exception e) {
                 log.error(e.getMessage());
+                e.printStackTrace();
                 log.error("Failed to create pool [" + pool.getName() + "]");
             }
         }
@@ -686,7 +1195,8 @@ public class ConfigureBlackPearl {
                 if(type.equals("NFS")) {
                     new_share = new Share(defaults.getNfsShare());
                     new_share.setComment(share.getName());
-                    
+                    new_share.setType("Nfs");
+
                     // Overwrite default permissions if they are set.
                     //      The ShareConfig class takes permissions values
                     //      as an array and converts that array to a single 
@@ -699,9 +1209,21 @@ public class ConfigureBlackPearl {
                 } else { // default to cifs
                     new_share = new Share(defaults.getCifsShare());
                     new_share.setName(share.getName());
+                    new_share.setType("Cifs");
                 }
 
-                new_share.setMountPoint(new_share.getMountPoint().replace("{{volume}}", share.getVolume()));
+                if(share.getMountPoint() != null) {
+                    new_share.setMountPoint(share.getMountPoint());
+                }
+
+                if(new_share.getMountPoint() != null) {
+                    new_share.setMountPoint(new_share.getMountPoint().replace("{{volume}}", share.getVolume()));
+                }
+                
+                if(share.getAccessControl() != null) {
+                    new_share.setAccessControl(share.getAccessControl());
+                }
+
                 new_share.setReadonly(share.isReadonly());
 
                 if(share.getPath() != null) {
@@ -822,12 +1344,12 @@ public class ConfigureBlackPearl {
                 // Set min and max sizes
                 // Reservation is min size
                 // Quota is max size
-                if(vol.getMinSize() != null) {
+                if(vol.getMinSize() != null && !vol.getMinSize().equals("")) {
                     log.debug("Setting minimum volume size of " + vol.getMinSize());
                     new_volume.setReservation(StorageConversion.humanReadableToBytes(vol.getMinSize()));
                 }
 
-                if(vol.getMaxSize() != null) {
+                if(vol.getMaxSize() != null && !vol.getMaxSize().equals("")) {
                     log.debug("Setting maximum volume size of " + vol.getMaxSize());
                     new_volume.setQuota(StorageConversion.humanReadableToBytes(vol.getMaxSize()));
                 }
@@ -855,5 +1377,134 @@ public class ConfigureBlackPearl {
         log.info("Failed to create " + (volume_list.size() - success) + "/" + volume_list.size() + " volumes.");
 
         return success;
+    }
+   
+    public static boolean setDnsServers(List<String> dns_servers, List<String> default_servers, BpConnector pearl) {
+        log.info("Configuration contains (" + dns_servers.size() + ") DNS servers.");
+        log.info("Default configuration contains (" + default_servers.size() + ") DNS servers.");
+    
+        NetworkInterface interf = null;
+
+        if(dns_servers.size() > 0) {
+            log.info("Using configuration settings to update the DNS servers.");
+            interf = UpdateDnsSettings.fromList(dns_servers, pearl);
+        } else if(default_servers.size() > 0) {
+            log.info("Using default settings to update the DNS servers.");
+            interf = UpdateDnsSettings.fromList(default_servers, pearl);
+        } else {
+            log.info("No DNS servers provided for configuration.");
+        }
+    
+        if(interf != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean setNtpServers(List<String> config_servers, List<String> default_servers, BpConnector pearl) {
+        log.info("Configuration contains (" + config_servers.size() + ") NTP servers.");
+        log.info("Default configuration contains (" + default_servers.size() + ") NTP servers.");
+    
+        String[] servers = new String[2];
+        
+        // Set default values
+        for(int i=0; i<default_servers.size(); i++) {
+            if(i < 2) { // max allowed servers
+                servers[i] = default_servers.get(i);
+            }
+        }
+
+        // Overwrite defaults with settings.
+        for(int i=0; i<config_servers.size(); i++) {
+            if(i < 2) { // max allowed servers
+                servers[i] = config_servers.get(i);
+            }
+        }
+
+        NtpSettings settings = UpdateNtpServers.setServers(servers[0], servers[1], pearl);
+
+        if(settings != null) {
+            log.info("Successfully updated NTP settings from configuration.");
+            return true;
+        } else {
+            log.error("Could not load NTP settings from configuraton.");
+            return false;
+        }
+    }
+
+    public static boolean setSmtpSettings(SmtpSettings config, SmtpSettings defaults, BpConnector pearl) {
+        log.info("Setting SMTP settings from configuration.");
+
+        SmtpSettings settings = new SmtpSettings(defaults);
+
+        // Replace default parameters with values included in the configuration.
+        if(config != null) {
+            if(config.getAddress() != null) {
+                settings.setAddress(config.getAddress());
+            }
+
+            if(config.getPort() != null) {
+                settings.setPort(config.getPort());     
+            }
+
+            if(config.getAuthenticationType() != null) {
+                settings.setAuthenticationType(config.getAuthenticationType());
+            }   
+
+            if(config.isTls() != null) {
+                settings.setTls(config.isTls());
+            }
+
+            if(config.getUsername() != null) {
+                settings.setUsername(config.getUsername());
+            }
+
+            if(config.getPassword() != null) {
+                settings.setPassword(config.getPassword());
+            }
+
+            if(config.getFrom() != null) {
+                settings.setFrom(config.getFrom());
+            }
+        }
+
+        settings = UpdateSmtpSettings.fromObject(settings, pearl);
+
+        if(settings != null) {
+            log.info("SMTP settings configured successfully");
+            return true;
+        } else {
+            log.warn("SMTP settings were not configured.");
+            return false;
+        }
+        
+    }
+
+    public static void waitForDs3BackendToComeOnline(int wait_timer, BpConnector pearl) {
+        log.info("Checking if a pause is needed for the DS3 backed to come online.");
+
+        List<ActivationKey> key_list = ListActivationKeys.all(pearl);
+        boolean wait_required = false;
+
+        for(ActivationKey key : key_list) {
+            if(key.getKeyType().equals("em_s3")) {
+                log.info("DS3 Nearline Gateway key is present. Waiting for the backend configuration to complete.");
+                wait_required = true;
+            }
+        }
+
+        if(wait_required) {
+            System.out.println("Waiting on DS3 Nearline Gateway backend to come online.");
+            
+            List<StorageDomain> domain_list = new ArrayList<>();
+
+            do {
+                log.debug("Waiting " + wait_timer + " seconds for the backend to come online.");
+                domain_list = ListStorageDomains.all(pearl);
+            } while(domain_list.size() == 0);
+        } else {
+            log.debug("No need to wait for DS3 Nearline Gateway backend.");
+        }
     }
 }

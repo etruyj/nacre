@@ -47,7 +47,7 @@ public class DiskDrive {
     private String encryptionState;
     @SerializedName("firmware_version")
     private String firmwareVersion;
-    @SerializedName("interface_type")
+    @SerializedName("interface")
     private String interfaceType;
     @SerializedName("label_guid")
     private String labelGuid;
@@ -92,7 +92,7 @@ public class DiskDrive {
     public Boolean getEncryption() { return encryption; }
     public String getEncryptionState() { return encryptionState; }
     public String getFirmwareVersion() { return firmwareVersion; }
-    public String getInterfaceType() { return interfaceType; }
+    public String getInterface() { return interfaceType; }
     public String getLabelGuid() { return labelGuid; }
     public String getLabelState() { return labelState; }
     public Integer getPercentageUsed() { return percentageUsed; }
@@ -129,7 +129,7 @@ public class DiskDrive {
     public void setEncryption(Boolean encryption) { this.encryption = encryption; }
     public void setEncryptionState(String encryptionState) { this.encryptionState = encryptionState; }
     public void setFirmwareVersion(String firmwareVersion) { this.firmwareVersion = firmwareVersion; }
-    public void setInterfaceType(String interfaceType) { this.interfaceType = interfaceType; }
+    public void setInterface(String interfaceType) { this.interfaceType = interfaceType; }
     public void setLabelGuid(String labelGuid) { this.labelGuid = labelGuid; }
     public void setLabelState(String labelState) { this.labelState = labelState; }
     public void setPercentageUsed(Integer percentageUsed) { this.percentageUsed = percentageUsed; }

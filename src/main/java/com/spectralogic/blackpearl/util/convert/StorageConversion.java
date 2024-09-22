@@ -69,7 +69,11 @@ public class StorageConversion {
             }
             return number;
         } else {
-            throw new Exception("Unable to convert " + value + " to bytes.");
+            try {
+                return Long.valueOf(value);
+            } catch(Exception e) {
+                throw new Exception("Unable to convert " + value + " to bytes.");
+            }
         }
     }
 }

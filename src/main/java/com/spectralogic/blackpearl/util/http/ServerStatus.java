@@ -19,21 +19,21 @@ import org.slf4j.LoggerFactory;
 public class ServerStatus {
     private static final Logger log = LoggerFactory.getLogger(ServerStatus.class);
 
-    public static boolean isOnline(String endpoint, int timeout_seconds) throws Exception {
-        log.debug("Verifying server at " + endpoint + " is online. Timeout is set to " + timeout_seconds + " seconds.");
+    public static boolean isOnline(String endpoint, int timeout_milliseconds) throws Exception {
+        log.debug("Verifying server at " + endpoint + " is online. Timeout is set to " + timeout_milliseconds + " milliseconds.");
         String ip_address = AddressResolver.resolveDomainNameToIP(endpoint);
 
         log.debug("Endpoint [" + endpoint + "] is located at IP address " + ip_address);
     
-        return ping(ip_address, timeout_seconds);
+        return ping(ip_address, timeout_milliseconds);
     }
 
-    public static boolean ping(String ip_address, int timeout_seconds) throws Exception {
+    public static boolean ping(String ip_address, int timeout_milliseconds) throws Exception {
         InetAddress ip_addr = InetAddress.getByName(ip_address);
 
-        log.debug("Pining [" + ip_address + "]....");
+        log.debug("Pinging [" + ip_address + "]....");
 
-        if(ip_addr.isReachable(timeout_seconds)) {
+        if(ip_addr.isReachable(timeout_milliseconds)) {
             log.debug("Server is reachable.");
             return true;
         } else {
