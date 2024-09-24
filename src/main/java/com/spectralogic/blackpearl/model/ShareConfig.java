@@ -39,6 +39,10 @@ public class ShareConfig extends Share {
         this.setPermissions(share.getPermissions());
     }
 
+    public ShareConfig(Share share) {
+        super(share);
+    }
+
     //===========================================
     // Getters
     //===========================================

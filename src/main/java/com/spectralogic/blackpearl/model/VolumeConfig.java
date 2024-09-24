@@ -32,6 +32,10 @@ public class VolumeConfig extends Volume {
         this.setMaxSize(vol.getMaxSize());
         this.setMinSize(vol.getMinSize());
     }
+
+    public VolumeConfig(Volume vol) {
+        super(vol);
+    }
     
     //===========================================
     // Getters
