@@ -37,6 +37,7 @@ import com.spectralogic.blackpearl.nacre.model.ScheduleLogSet;
 import com.spectralogic.blackpearl.nacre.model.Service;
 import com.spectralogic.blackpearl.nacre.model.ServiceCifs;
 import com.spectralogic.blackpearl.nacre.model.ServiceNfs;
+import com.spectralogic.blackpearl.nacre.model.ServiceS3;
 import com.spectralogic.blackpearl.nacre.model.Share;
 import com.spectralogic.blackpearl.nacre.model.ShareConfig;
 import com.spectralogic.blackpearl.nacre.model.SmtpSettings;
@@ -1497,12 +1498,12 @@ public class ConfigureBlackPearl {
         if(wait_required) {
             System.out.println("Waiting on DS3 Nearline Gateway backend to come online.");
             
-            List<StorageDomain> domain_list = new ArrayList<>();
+            ServiceS3 s3_service;
 
             do {
                 log.debug("Waiting " + wait_timer + " seconds for the backend to come online.");
-                domain_list = ListStorageDomains.all(pearl);
-            } while(domain_list.size() == 0);
+                s3_service = GetService.s3(pearl);
+            } while(s3_service != null && !s3_service.getState().equals("operational"));
         } else {
             log.debug("No need to wait for DS3 Nearline Gateway backend.");
         }

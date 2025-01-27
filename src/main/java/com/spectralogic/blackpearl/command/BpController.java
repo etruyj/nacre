@@ -10,6 +10,7 @@
 package com.spectralogic.blackpearl.nacre.command;
 
 import com.spectralogic.blackpearl.nacre.api.BpConnector;
+import com.spectralogic.blackpearl.nacre.model.ActivationKey;
 import com.spectralogic.blackpearl.nacre.model.ActivationKeyConfig;
 import com.spectralogic.blackpearl.nacre.model.BlackPearlNode;
 import com.spectralogic.blackpearl.nacre.model.BpConfig;
@@ -19,6 +20,7 @@ import com.spectralogic.blackpearl.nacre.model.DiskDrive;
 import com.spectralogic.blackpearl.nacre.model.DiskPartition;
 import com.spectralogic.blackpearl.nacre.model.Ds3Bucket;
 import com.spectralogic.blackpearl.nacre.model.Ds3User;
+import com.spectralogic.blackpearl.nacre.model.DriveTypeSummary;
 import com.spectralogic.blackpearl.nacre.model.NetworkInterface;
 import com.spectralogic.blackpearl.nacre.model.NtpSettings;
 import com.spectralogic.blackpearl.nacre.model.Pool;
@@ -34,6 +36,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,6 +82,10 @@ public class BpController {
         AddActivationKey.fromUserInput(key, name, defaults, pearl);
     }
 
+    public void addActivationKey(ActivationKeyConfig key, DefaultsConfig defaults) {
+        AddActivationKey.fromObject(key, defaults, pearl);
+    }
+
     public void backupDatabase() {
         CreateDatabaseBackup.newBackup(pearl);
     }
@@ -89,6 +96,14 @@ public class BpController {
 
     public ArrayList<String> configureFromObject(BpConfig bpconfig) {
         return ConfigureBlackPearl.fromObject(bpconfig, defaults, pearl);  
+    }
+
+    public boolean enableSsh(ActivationKey key) {
+        return EnableSsh.withActivationKey(key, pearl);
+    }
+
+    public String getHostname() {
+        return GetHostname.fromNode(pearl);
     }
 
     public NtpSettings getNtpSettings() {
@@ -114,6 +129,15 @@ public class BpController {
     public ArrayList<DiskDrive> listDiskDrivesAvailable() {
         return ListDiskDrives.availableData(pearl);
     }
+    
+    public HashMap<String, DriveTypeSummary> listDiskDrivesAvailableSummary() {
+        return ListDiskDrives.summarizeAvailable(pearl);
+    }
+
+    public void listDiskDrivesAvailableShell() {
+        ListDiskDrives.summarizeAvailable(pearl);
+    }
+
 
     public ArrayList<DiskPartition> listDs3DiskPartitions() {
         return ListDs3DiskPartitions.all(pearl);
@@ -129,6 +153,10 @@ public class BpController {
 
     public ArrayList<BlackPearlNode> listNodes() {
         return ListNodes.all(pearl);
+    }
+
+    public ArrayList<String> listNtpServers() {
+        return ListNtpServers.getServers(pearl);
     }
 
     public ArrayList<Pool> listPools() {

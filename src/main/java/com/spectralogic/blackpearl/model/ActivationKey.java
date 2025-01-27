@@ -29,9 +29,13 @@ public class ActivationKey {
     @SerializedName("key_data")
     private Integer keyData;
     @SerializedName("decoded_key_data")
-    private Integer decodedKeyData;
+    private Long decodedKeyData;
     @SerializedName("decoded_key_data_str")
     private String decodedKeyDataStr;
+
+    public ActivationKey() {} // blank constructor;
+
+    public ActivationKey(String key) { this.rawKey = key; }
 
     //===========================================
     // Getters
@@ -45,7 +49,7 @@ public class ActivationKey {
     public String getCreatedAt() { return createdAt; }
     public String getUpdatedAt() { return updatedAt; }
     public Integer getKeyData() { return keyData; }
-    public Integer getDecodedKeyData() { return decodedKeyData; }
+    public Long getDecodedKeyData() { return decodedKeyData; }
     public String getDecodedKeyDataStr() { return decodedKeyDataStr; }
 
     //===========================================
@@ -60,7 +64,7 @@ public class ActivationKey {
     public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
     public void setUpdatedAt(String updatedAt) { this.updatedAt = updatedAt; }
     public void setKeyData(Integer keyData) { this.keyData = keyData; }
-    public void setDecodedKeyData(Integer decodedKeyData) { this.decodedKeyData = decodedKeyData; }
+    public void setDecodedKeyData(Long decodedKeyData) { this.decodedKeyData = decodedKeyData; }
     public void setDecodedKeyDataStr(String decodedKeyDataStr) { this.decodedKeyDataStr = decodedKeyDataStr; }
 }
 

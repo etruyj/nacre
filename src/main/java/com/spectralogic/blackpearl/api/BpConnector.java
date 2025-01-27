@@ -242,4 +242,8 @@ public class BpConnector {
     public SmtpSettings updateSmtpSettings(SmtpSettings settings) throws IOException, JsonParseException {
         return SmtpServer.update(settings, domain_name, token, rest_client);
     }
+
+    public Ds3User updateUser(Ds3User user) throws IOException, JsonParseException {
+        return Users.put(user, domain_name, token, rest_client);
+    }
 }

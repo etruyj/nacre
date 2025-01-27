@@ -41,7 +41,7 @@ public class AddActivationKey {
     }
 
     public static ActivationKey fromObject(ActivationKeyConfig key, DefaultsConfig defaults, BpConnector pearl) {
-        log.info("Adding activation key [" + key.getKey() + "] to BlackPearl.");
+        log.info("Adding " + key.getName() + " activation key [" + key.getKey() + "] to BlackPearl.");
         
         // Adding this flag as a wait and re-check when we're expecting a restart.
         // Sometimes the node API call doesn't update the pending shutdown field

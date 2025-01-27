@@ -20,6 +20,13 @@ import org.slf4j.LoggerFactory;
 public class ListNtpServers {
     private static final Logger log = LoggerFactory.getLogger(ListNtpServers.class);
 
+    public static ArrayList<String> getServers(BpConnector pearl) {
+        NtpSettings settings = getSettings(pearl);
+
+        log.info("System has " + settings.getAddresses().size() + " servers configured.");
+        return settings.getAddresses();
+    }
+
     public static NtpSettings getSettings(BpConnector pearl) {
         log.info("Fetching NTP server information.");
         NtpSettings settings = null;

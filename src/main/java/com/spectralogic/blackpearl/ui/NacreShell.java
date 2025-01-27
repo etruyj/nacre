@@ -11,6 +11,7 @@
 package com.spectralogic.blackpearl.nacre.ui;
 
 import com.spectralogic.blackpearl.nacre.command.BpController;
+import com.spectralogic.blackpearl.nacre.model.ActivationKey;
 import com.spectralogic.blackpearl.nacre.ui.ArgParser;
 
 public class NacreShell {
@@ -44,8 +45,11 @@ public class NacreShell {
                 case "configure":
                     conn.configureFromFile(aparser.getRequiredValue("file"));
                     break;
+                case "enable-ssh":
+                    conn.enableSsh(new ActivationKey(aparser.getRequiredValue("key")));
+                    break;
                 case "list-available-drives":
-                    conn.listDiskDrivesAvailable();
+                    conn.listDiskDrivesAvailableShell();
                     break;
                 case "list-data-policies":
                     conn.listDataPolicies();

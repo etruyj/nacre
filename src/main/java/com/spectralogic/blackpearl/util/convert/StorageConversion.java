@@ -10,7 +10,42 @@
 
 package com.spectralogic.blackpearl.nacre.util.convert;
 
+import java.lang.Math;
+
 public class StorageConversion {
+    public static String bytesToHumanReadable(long bytes) {
+        String units = "B";
+
+        double number = Double.valueOf(bytes);
+
+        while(number >= 1024) {
+            number = number / 1024;
+
+            switch (units) {
+                case "B":
+                    units = "KiB";
+                    break; 
+                case "KiB":
+                    units = "MiB";
+                    break;
+                case "MiB":
+                    units = "GiB";
+                    break;
+                case "GiB":
+                    units = "TiB";
+                    break;
+                case "TiB":
+                    units = "PiB";
+                    break;
+                case "PiB":
+                    units = "EiB";
+                    break;
+            }
+        }
+
+        return String.valueOf(Math.round(number * 10.0) / 10.0) + " " + units; //multiply up by 10 to allow a divide down to 1 decimal place.
+    }
+    
     public static long humanReadableToBytes(String value) throws Exception {
         // break the units from the numbers
         String[] parts = value.split(" ");

@@ -43,6 +43,24 @@ public class Users {
         return results.getData();
     }
 
+    public static Ds3User put(Ds3User user, String ip_address, String token, RestClient rest_client) throws IOException, JsonParseException {
+        Gson gson = new Gson();
+
+        String url = getUrl(ip_address) + "/" + user.getId();
+        String payload = gson.toJson(user);
+
+        log.debug("API URL: PUT " + url);
+        log.debug("Payload: " + payload);
+
+        String response = rest_client.put(url, token, payload);
+
+        log.debug("API Response: " + response);
+
+        Ds3User new_user = gson.fromJson(response, Ds3User.class);
+
+        return new_user;
+    }
+
     //===========================================
     // Private Functions
     //===========================================

@@ -12,6 +12,7 @@ package com.spectralogic.blackpearl.nacre.command;
 
 import com.spectralogic.blackpearl.nacre.api.BpConnector;
 import com.spectralogic.blackpearl.nacre.model.DiskDrive;
+import com.spectralogic.blackpearl.nacre.model.DriveTypeSummary;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -123,5 +124,38 @@ public class ListDiskDrives {
         }
 
         return drive_list;
+    }
+
+    public static HashMap<String, DriveTypeSummary> summarizeAvailable(BpConnector pearl) {
+        ArrayList<DiskDrive> drive_list = available(pearl);
+
+        DriveTypeSummary info;
+
+        HashMap<String, DriveTypeSummary> drive_count_map = new HashMap<String, DriveTypeSummary>();
+
+        for(DiskDrive drive : drive_list) {
+            if(drive_count_map.get(drive.getProduct()) == null) {
+                info = new DriveTypeSummary();
+                
+                info.setSize(drive.getSize());
+                info.setModel(drive.getProduct());
+                info.setSpeed(drive.getSpeed());
+                info.setInterfaceType(drive.getInterface());
+                info.setCount(1);
+
+                drive_count_map.put(info.getModel(), info);
+            } else {
+                info = drive_count_map.get(drive.getProduct());
+                info.incrementCount();
+
+                drive_count_map.put(info.getModel(), info);
+            }
+        }
+    
+        for(String key : drive_count_map.keySet()) {
+            System.out.println(drive_count_map.get(key).getDriveType() + ":\t" + drive_count_map.get(key).getCount());
+        }
+
+        return drive_count_map;
     }
 }

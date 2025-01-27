@@ -21,7 +21,7 @@ public class Ds3User {
     private String name;
     private String username;
     @SerializedName("session_timeout")
-    private int sessionTimeout;
+    private String sessionTimeout;
     @SerializedName("created_at")
     private String createdAt;
     @SerializedName("updated_at")
@@ -36,7 +36,7 @@ public class Ds3User {
     @SerializedName("mfa_secret")
     private String mfaSecret;
     @SerializedName("remote_support_enabled")
-    private Boolean remoteSupportEnabled;
+    public Boolean remoteSupportEnabled;
     @SerializedName("default_data_policy_id")
     private String defaultDataPolicyId;
     @SerializedName("global_bucket_acl_permissions")
@@ -52,7 +52,7 @@ public class Ds3User {
     public int getId() { return id; }
     public String getName() { return name; }
     public String getUsername() { return username; }
-    public int getSessionTimeout() { return sessionTimeout; }
+    public String getSessionTimeout() { return sessionTimeout; }
     public String getCreatedAt() { return createdAt; }
     public String getUpdatedAt() { return updatedAt; }
     public String getDs3UserId() { return ds3UserId; }
@@ -60,7 +60,7 @@ public class Ds3User {
     public List<Integer> getPermissions() { return permissions; }
     public String getMfaCode() { return mfaCode; }
     public String getMfaSecret() { return mfaSecret; }
-    public Boolean getRemoteSupportEnabled() { return remoteSupportEnabled; }
+    public Boolean isRemoteSupportEnabled() { return remoteSupportEnabled; }
     public String getDefaultDataPolicyId() { return defaultDataPolicyId; }
     public List<Object> getGlobalBucketAclPermissions() { return globalBucketAclPermissions; }
     public Boolean getGlobalDataPolicyAclEnabled() { return globalDataPolicyAclEnabled; }
@@ -72,7 +72,7 @@ public class Ds3User {
     public void setId(int id) { this.id = id; }
     public void setName(String name) { this.name = name; }
     public void setUsername(String username) { this.username = username; }
-    public void setSessionTimeout(int sessionTimeout) { this.sessionTimeout = sessionTimeout; }
+    public void setSessionTimeout(String sessionTimeout) { this.sessionTimeout = sessionTimeout; }
     public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
     public void setUpdatedAt(String updatedAt) { this.updatedAt = updatedAt; }
     public void setDs3UserId(String ds3UserId) { this.ds3UserId = ds3UserId; }
