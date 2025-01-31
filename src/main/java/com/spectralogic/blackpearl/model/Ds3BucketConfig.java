@@ -25,7 +25,9 @@ public class Ds3BucketConfig extends Ds3Bucket{
     @SerializedName("bucket_isolated")
     private boolean bucket_isolated;
     @SerializedName("already_exists")
-    private boolean already_exists;
+    private Boolean already_exists;
+    @SerializedName("vail_owned")
+    private Boolean vail_owned; // whether the script should skip bucket creation.
 
     //===========================================
     // Getters
@@ -36,7 +38,8 @@ public class Ds3BucketConfig extends Ds3Bucket{
     public int getOsdCopies() { return osd_copies; }
     public int getOsdDuration() { return osd_duration; }
     public boolean isBucketIsolated() { return bucket_isolated; }
-    public boolean isAlreadyExists() { return already_exists; }
+    public Boolean isAlreadyExists() { return already_exists; }
+    public Boolean isVailOwned() { return vail_owned; }
 
     //===========================================
     // Setters
@@ -47,5 +50,6 @@ public class Ds3BucketConfig extends Ds3Bucket{
     public void setOsdCopies(int copies) { this.osd_copies = copies; }
     public void setOsdDuration(int days) { this.osd_duration = days; }
     public void setBucketIsolated(boolean isolated) { this.bucket_isolated = isolated; }
-    public void setAlreadyExists(boolean exists) { this.already_exists = exists; }
+    public void setAlreadyExists(Boolean exists) { this.already_exists = exists; }
+    public void setVailOwned(Boolean skip) { this.vail_owned = skip; }
 }

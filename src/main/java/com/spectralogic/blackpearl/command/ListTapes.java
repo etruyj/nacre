@@ -72,4 +72,25 @@ public class ListTapes {
             log.error("Failed to sum tapes by bucket...");
         }
     }
+
+    public static ArrayList<Tape> byState(String state, BpConnector pearl) {
+        ArrayList<Tape> all_tapes = all(pearl);
+        ArrayList<Tape> filtered_list = new ArrayList<Tape>();
+
+        log.info("Filtering list of tapes based on tape state [" + state + "]");
+        
+        for(Tape tape : all_tapes) {
+            if(tape.getState().equals(state)) {
+                filtered_list.add(tape);
+            }
+        }
+
+        log.info("Found (" + filtered_list.size() + ") " + state + " tapes");
+
+        for(Tape tape : filtered_list) {
+            System.err.println("[" + tape.getBarCode() + "]: " + tape.getState());
+        }
+
+        return filtered_list;
+    }
 }

@@ -129,6 +129,10 @@ public class BpConnector {
         return Volumes.create(volume, domain_name, token, rest_client);
     }
 
+    public void deleteTape(String tape_id) throws IOException, JsonParseException {
+        Tapes.delete(tape_id, domain_name, token, rest_client);
+    }
+
     public ScheduleDatabaseBackup getDatabaseBackupSchedule() throws IOException, JsonParseException {
         return DatabaseBackups.getBackupSchedule(domain_name, token, rest_client);
     }

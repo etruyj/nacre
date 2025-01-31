@@ -13,6 +13,9 @@ package com.spectralogic.blackpearl.nacre.ui;
 import com.spectralogic.blackpearl.nacre.command.BpController;
 import com.spectralogic.blackpearl.nacre.model.ActivationKey;
 import com.spectralogic.blackpearl.nacre.ui.ArgParser;
+import com.spectralogic.blackpearl.nacre.ui.display.Display;
+
+import java.util.ArrayList;
 
 public class NacreShell {
     public static void main(String[] args) {
@@ -34,6 +37,8 @@ public class NacreShell {
     }
 
     public static void processCommand(ArgParser aparser, BpController conn) {
+        ArrayList output = null;
+
         try {
             switch(aparser.getRequiredValue("command")) {
                 case "add-key":
@@ -41,6 +46,12 @@ public class NacreShell {
                     break;
                 case "backup-database":
                     conn.backupDatabase();
+                    break;
+                case "delete-tape":
+                    conn.deleteTapeByBarcode(aparser.getRequiredValue("barcode"));
+                    break;
+                case "delete-ejected-tapes":
+                    conn.deleteTapeLostOrEjected();
                     break;
                 case "configure":
                     conn.configureFromFile(aparser.getRequiredValue("file"));
@@ -54,11 +65,17 @@ public class NacreShell {
                 case "list-data-policies":
                     conn.listDataPolicies();
                     break;
+                case "list-network-interfaces":
+                    output = conn.listNetworkInterfacesAll();
+                    break;
                 case "list-nodes":
                     conn.listNodes();
                     break;
                 case "list-services":
                     conn.listServices();
+                    break;
+                case "list-tapes":
+                    conn.listTapes(aparser.getValue("state"));
                     break;
                 case "load-keys":
                     conn.loadActivationKeys(aparser.getRequiredValue("file"));
@@ -80,6 +97,10 @@ public class NacreShell {
                     break;
                 default:
                     System.err.println("Invalid command [" + aparser.getRequiredValue("command") + "] selected.");
+            }
+
+            if(output != null) {
+                Display.print(output);
             }
         } catch(Exception e) {
             System.err.println(e.getMessage());

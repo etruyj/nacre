@@ -49,6 +49,18 @@ public class Tapes {
         }
     }
 */
+    public static void delete(String tape_id, String ip_address, String token, RestClient rest_client) throws IOException, JsonParseException {
+        Gson gson = new Gson(); // not sure this is necessary
+
+        String url = getUrl(ip_address) + "/" + tape_id;
+
+        log.debug("API URL: DELETE " + url);
+
+        String response = rest_client.delete(url, token);
+
+        log.debug("API Response: " + response);
+    }
+
     public static ArrayList<Tape> list(String ip_address, String token, RestClient rest_client) throws IOException, JsonParseException {
         Gson gson = new Gson();
 

@@ -98,6 +98,14 @@ public class BpController {
         return ConfigureBlackPearl.fromObject(bpconfig, defaults, pearl);  
     }
 
+    public void deleteTapeByBarcode(String barcode) {
+        DeleteTape.byBarcode(barcode, pearl);
+    }
+
+    public void deleteTapeLostOrEjected() {
+        DeleteTape.lostOrEjected(pearl);
+    }
+
     public boolean enableSsh(ActivationKey key) {
         return EnableSsh.withActivationKey(key, pearl);
     }
@@ -175,8 +183,12 @@ public class BpController {
         return ListStorageDomains.all(pearl);
     }
 
-    public ArrayList<Tape> listTapes() {
-        return ListTapes.all(pearl);
+    public ArrayList<Tape> listTapes(String filter) {
+        if(filter == null) {
+            return ListTapes.all(pearl);
+        } else {
+            return ListTapes.byState(filter, pearl);
+        }
     }
 
     public void listTapesByBucket() {
