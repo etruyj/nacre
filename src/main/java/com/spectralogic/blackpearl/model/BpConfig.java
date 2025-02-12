@@ -10,7 +10,9 @@
 package com.spectralogic.blackpearl.nacre.model;
 
 import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
+import java.util.Map;
 
 public class BpConfig {
     private String hostname;
@@ -43,10 +45,8 @@ public class BpConfig {
     private ArrayList<String> ntp_servers; 
     @SerializedName("dns_servers")
     private ArrayList<String> dns_servers;
-    @SerializedName("management_interface")
-    private NetworkInterfaceConfig mgmt_interface;
-    @SerializedName("data_interface")
-    private NetworkInterfaceConfig data_interface;
+    @SerializedName("network_interfaces")
+    private Map<String, NetworkInterfaceConfig> network_interfaces;
 
     //===========================================
     // Getters
@@ -67,8 +67,8 @@ public class BpConfig {
     public ScheduleLogConfig getLogSchedule() { return log_schedule; }
     public ArrayList<String> getNtpServers() { return ntp_servers; }
     public ArrayList<String> getDnsServers() { return dns_servers; }
-    public NetworkInterfaceConfig getManagementInterface() { return mgmt_interface; }
-    public NetworkInterfaceConfig getDataInterface() { return mgmt_interface; }
+    public Map<String, NetworkInterfaceConfig> getNetworkInterfaces() { return network_interfaces; }
+    public NetworkInterfaceConfig getNetworkInterface(String type) { return network_interfaces.get(type); }
 
     //===========================================
     // Setters
@@ -90,143 +90,5 @@ public class BpConfig {
     public void setLogSchedule(ScheduleLogConfig schedule) { this.log_schedule = schedule; }
     public void setNtpServers(ArrayList<String> servers) { this.ntp_servers = servers; }
     public void setDnsServers(ArrayList<String> servers) { this.dns_servers = servers; }
-    public void setManagementInterface(NetworkInterfaceConfig mgmt) { this.mgmt_interface = mgmt; }
-    public void setDataInterface(NetworkInterfaceConfig data) { this.data_interface = data; }
-
-    //===========================================
-    // Functions
-    //===========================================
-    public void merge(BpConfig config) {
-        // This class merges two BlackPearl Configurations.
-        // The main purpose of this method is to combine the default settings configured
-        // for the BlackPearl with the settings configured in Vail.
-        
-        if(config.getHostname() != null) {
-            if(hostname == null) { hostname = config.getHostname(); }
-        }
-    
-        if(config.getActivationKeys() != null) {
-            if(activation_keys == null) { 
-                hostname = config.getHostname(); 
-            } else {
-                activation_keys.addAll(config.getActivationKeys());
-            }
-        }
-    
-        if(config.getDiskPartitions() != null) {
-            if(disk_partitions == null) { 
-                disk_partitions = config.getDiskPartitions(); 
-            } else {
-                disk_partitions.addAll(config.getDiskPartitions());
-            }
-        }
-    
-        if(config.getStorageDomains() != null) {
-            if(storage_domains == null) { 
-                storage_domains = config.getStorageDomains(); 
-            } else {
-                storage_domains.addAll(config.getStorageDomains());
-            }
-        }
-
-        if(config.getDataPolicies() != null) {
-            if(data_policies == null) { 
-                data_policies = config.getDataPolicies(); 
-            } else {
-                data_policies.addAll(config.getDataPolicies());
-            }
-        }
-    
-        if(config.getBuckets() != null) {
-            if(buckets == null) {
-                buckets = config.getBuckets();
-            } else {
-                buckets.addAll(config.getBuckets());
-            }
-        } 
-        
-        if(config.getNasPools() != null) {
-            if(nas_pools == null) { 
-                nas_pools = config.getNasPools(); 
-            } else {
-                nas_pools.addAll(config.getNasPools());
-            }
-        }
-    
-        if(config.getVolumes() != null) {
-            if(volumes == null) { 
-                volumes = config.getVolumes(); 
-            } else {
-                volumes.addAll(config.getVolumes());
-            }
-        }
-    
-        if(config.getDataPolicies() != null) {
-            if(data_policies == null) { 
-                data_policies = config.getDataPolicies(); 
-            } else {
-                data_policies.addAll(config.getDataPolicies());
-            }
-        }
-    
-        if(config.getCifsShares() != null) {
-            if(cifs_shares == null) { 
-                cifs_shares = config.getCifsShares(); 
-            } else {
-                cifs_shares.addAll(config.getCifsShares());
-            }
-        }
-    
-        if(config.getNfsShares() != null) {
-            if(nfs_shares == null) { 
-                nfs_shares = config.getNfsShares(); 
-            } else {
-                nfs_shares.addAll(config.getNfsShares());
-            }
-        }
-    
-        if(config.getVailShares() != null) {
-            if(vail_shares == null) { 
-                vail_shares = config.getVailShares(); 
-            } else {
-                vail_shares.addAll(config.getVailShares());
-            }
-        }
-    
-        if(config.getSmtpSettings() != null) {
-            if(smtp_settings == null) { smtp_settings = config.getSmtpSettings(); }
-        }
-    
-        if(config.getDatabaseBackup() != null) {
-            if(database_backup == null) { database_backup = config.getDatabaseBackup(); }
-        }
-    
-        if(config.getLogSchedule() != null) {
-            if(log_schedule == null) { log_schedule = config.getLogSchedule(); }
-        }
-    
-        if(config.getNtpServers() != null) {
-            if(ntp_servers == null) { 
-                ntp_servers = config.getNtpServers(); 
-            } else {
-                ntp_servers.addAll(config.getNtpServers());
-            }
-        }
-    
-        if(config.getDnsServers() != null) {
-            if(dns_servers == null) { 
-                dns_servers = config.getDnsServers(); 
-            } else {
-                dns_servers.addAll(config.getDnsServers());
-            }
-        }
-    
-        if(config.getManagementInterface() != null) {
-            if(mgmt_interface == null) { mgmt_interface = config.getManagementInterface(); }
-        }
-    
-        if(config.getDataInterface() != null) {
-            if(data_interface == null) { data_interface = config.getDataInterface(); }
-        }
-    }
+    public void setNetworkInterfaces(Map<String, NetworkInterfaceConfig> iface_map) { this.network_interfaces = iface_map; }
 }

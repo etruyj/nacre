@@ -27,9 +27,41 @@ public class SerializeNetworkInterface {
                 pair = new Output("type", iface.getType());
                 output.add(pair);
                 
+                if(iface.getAddresses() != null && iface.getAddresses().size() > 0) {
+                    String ips = "";
+                    for(NetworkInterface.IpAddress address : iface.getAddresses()) {
+                        ips += address.getAddress() + ", ";
+                    }
+
+                    ips = ips.substring(0, ips.length()-2);
+                    
+                    pair = new Output("address", ips);
+                    output.add(pair);
+                } else {
+                    pair = new Output("address", " ");
+                    output.add(pair);
+                }
+                
+                pair = new Output("fib", String.valueOf(iface.getFib()));
+                output.add(pair);
+                
+                pair = new Output("mtu", String.valueOf(iface.getMtu()));
+                output.add(pair);
+                
                 pair = new Output("link_speed", String.valueOf(iface.getLinkSpeed()));
                 output.add(pair);
                 
+                pair = new Output("link_status", iface.getLinkStatus());
+                output.add(pair);
+
+                if(iface.isUp()) {
+                    pair = new Output("link_state", "up");
+                    output.add(pair);
+                } else {
+                    pair = new Output("link_state", "down");
+                    output.add(pair);
+                }
+
                 pair = new Output("new-line", "");
                 output.add(pair);
             }

@@ -20,6 +20,25 @@ import org.slf4j.LoggerFactory;
 public class ListNetworkInterfaces {
     private static final Logger log = LoggerFactory.getLogger(ListNetworkInterfaces.class);
 
+    public static ArrayList<NetworkInterface> active(BpConnector pearl) {
+        log.info("Listing active interfaces in the BlackPearl.");
+
+        ArrayList<NetworkInterface> active_interfaces = new ArrayList<NetworkInterface>();
+
+        ArrayList<NetworkInterface> interface_list = all(pearl);
+
+        for(NetworkInterface iface : interface_list) {
+            if(iface.isUp() && iface.getLinkStatus().equals("active") 
+                    && iface.getAddresses() != null && iface.getAddresses().size() > 0) {
+                active_interfaces.add(iface);
+            }
+        }
+
+        log.info("Found (" + active_interfaces.size() + ") active interfaces.");
+
+        return active_interfaces;
+    }
+
     public static ArrayList<NetworkInterface> activeByType(String type, BpConnector pearl) {
         log.info("Listing active interfaces of type [" + type + "] in the BlackPearl.");
 

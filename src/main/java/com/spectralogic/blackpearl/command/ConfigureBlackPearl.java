@@ -322,7 +322,7 @@ public class ConfigureBlackPearl {
         //=======================================
         // Set Data Interface
         //=======================================
-        NetworkInterfaceConfig data_interface = config.getDataInterface() != null ? config.getDataInterface() : null;
+        NetworkInterfaceConfig data_interface = config.getNetworkInterface("data");
 
         if(data_interface != null) {
 
@@ -992,8 +992,8 @@ public class ConfigureBlackPearl {
                         throw new Exception("Unable to process pool type: " + stripe.getType());
                     }
 
-                    if(pool.getProtectionLevel() != null) {
-                        stripe.setProtectionLevel(pool.getProtectionLevel());
+                    if(pool.getProtection() != null) {
+                        stripe.setProtection(pool.getProtectionLevel());
                     }
                 
                     new_stripe = CreatePool.fromPoolConfig(stripe, defaults.getDs3Pool(), pearl); // this function dupes the above

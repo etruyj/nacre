@@ -151,6 +151,10 @@ public class BpController {
         return ListDs3DiskPartitions.all(pearl);
     }
 
+    public ArrayList<NetworkInterface> listNetworkInterfacesActive() {
+        return ListNetworkInterfaces.active(pearl);
+    }
+
     public ArrayList<NetworkInterface> listNetworkInterfacesAll() {
         return ListNetworkInterfaces.all(pearl);
     }
