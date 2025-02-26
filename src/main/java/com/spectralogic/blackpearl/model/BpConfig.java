@@ -12,6 +12,7 @@ package com.spectralogic.blackpearl.nacre.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class BpConfig {
@@ -73,6 +74,13 @@ public class BpConfig {
     //===========================================
     // Setters
     //===========================================
+    public void addDs3Bucket(Ds3BucketConfig bucket) {
+        if(buckets == null) {
+            buckets = new ArrayList<Ds3BucketConfig>();
+        }
+
+        buckets.add(bucket);
+    }
     public void addNtpServer(String server) { this.ntp_servers.add(server); }
     public void setHostname(String hostname) { this.hostname = hostname; }
     public void setActivationKeys(ArrayList<ActivationKeyConfig> keys) { this.activation_keys = keys; }
@@ -91,4 +99,18 @@ public class BpConfig {
     public void setNtpServers(ArrayList<String> servers) { this.ntp_servers = servers; }
     public void setDnsServers(ArrayList<String> servers) { this.dns_servers = servers; }
     public void setNetworkInterfaces(Map<String, NetworkInterfaceConfig> iface_map) { this.network_interfaces = iface_map; }
+    public void setDataInterface(NetworkInterfaceConfig iface) {
+        if(network_interfaces == null) {
+            network_interfaces = new HashMap<String, NetworkInterfaceConfig>();
+        }
+
+        network_interfaces.put("data", iface);
+    }
+    public void setManagementInterface(NetworkInterfaceConfig iface) {
+        if(network_interfaces == null) {
+            network_interfaces = new HashMap<String, NetworkInterfaceConfig>();
+        }
+
+        network_interfaces.put("management", iface);
+    }
 }
