@@ -176,7 +176,7 @@ public class Pool {
     }
     public void addStripe(Stripe stripe) { 
         if(topology == null) {
-            topology = new ArrayList<String>();
+            topology = new ArrayList<Stripe>();
         }
 
         topology.add(stripe); 

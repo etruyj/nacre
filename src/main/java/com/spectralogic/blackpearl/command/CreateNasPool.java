@@ -160,7 +160,7 @@ public class CreateNasPool {
 
             new_pool.setAvailable(pool_available);
             new_pool.setOverhead(pool_overhead);
-            new_pool.setUsed(0); // set used capacity to 0
+            new_pool.setUsed(0L); // set used capacity to 0 but a long version of 0.
 
             log.debug("Pool [" + new_pool.getName() + "] will have " + pool_available + " bytes available.");
         
