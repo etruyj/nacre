@@ -68,6 +68,8 @@ public class NacreShell {
                 case "list-network-interfaces":
                     if(aparser.getBoolean("active")) {
                         output = conn.listNetworkInterfacesActive();
+                    } else if(aparser.getValue("type") != null) {
+                        output = conn.listNetworkInterfacesActiveByType(aparser.getValue("type"));
                     } else {
                         output = conn.listNetworkInterfacesAll();
                     }
@@ -91,6 +93,12 @@ public class NacreShell {
                     break;
                 case "set-hostname":
                     conn.setHostname(aparser.getRequiredValue("name"));
+                    break;
+                case "set-ip":
+                    conn.createNetworkInterface(aparser.getRequiredValue("address"),
+                                                aparser.getRequiredValue("prefix"),
+                                                aparser.getBoolean("aggregate"),
+                                                aparser.getRequiredValue("type"));
                     break;
                 case "set-ntp":
                 case "set-ntp-servers":

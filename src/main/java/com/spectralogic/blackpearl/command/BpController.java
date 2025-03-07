@@ -98,6 +98,10 @@ public class BpController {
         return ConfigureBlackPearl.fromObject(bpconfig, defaults, pearl);  
     }
 
+    public String createNetworkInterface(String ip, String prefix, boolean aggregate, String type) {
+        return ConfigureNetworkInterface.ipFromShell(ip, prefix, aggregate, type, pearl);
+    }
+
     public void deleteTapeByBarcode(String barcode) {
         DeleteTape.byBarcode(barcode, pearl);
     }
@@ -153,6 +157,10 @@ public class BpController {
 
     public ArrayList<NetworkInterface> listNetworkInterfacesActive() {
         return ListNetworkInterfaces.active(pearl);
+    }
+
+    public ArrayList<NetworkInterface> listNetworkInterfacesActiveByType(String type) {
+        return ListNetworkInterfaces.activeByType(type, pearl);
     }
 
     public ArrayList<NetworkInterface> listNetworkInterfacesAll() {
