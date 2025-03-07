@@ -83,9 +83,19 @@ public class NetworkInterfaceSend {
         setLinkSpeed(other.getLinkSpeed());
         setMtu(String.valueOf(other.getMtu()));
         setPortType(other.getPortType());
-        setSearchDomains(new ArrayList<>(other.getSearchDomains()));
+        if(other.getSearchDomains() != null) {
+            setSearchDomains(new ArrayList<>(other.getSearchDomains()));
+        } else {
+            setSearchDomains(new ArrayList<>());
+        }
+
         setSlot(other.getSlot());
-        setSupportedMedia(new ArrayList<>(other.getSupportedMedia()));
+        if(other.getSupportedMedia() != null) {
+            setSupportedMedia(new ArrayList<>(other.getSupportedMedia()));
+        } else {
+            setSupportedMedia(new ArrayList<>());
+        }
+
         setIfname(other.getIfname());
         setPeername(other.getPeername());
         setManualDns(other.isManualDns());
@@ -98,10 +108,30 @@ public class NetworkInterfaceSend {
         setName(other.getName());
         setDefaultGateway(other.getDefaultGateway());
         setIpv6DefaultGateway(other.getIpv6DefaultGateway());
-        setHotpairAddresses(new ArrayList<>(other.getHotpairAddresses()));
-        setLaggPorts(new ArrayList<>(other.getLaggPorts()));
-        setSlots(new ArrayList<>(other.getSlots()));
-        setNameServers(new ArrayList<>(other.getNameServers()));
+        
+        if(other.getHotpairAddresses() != null) {
+            setHotpairAddresses(new ArrayList<>(other.getHotpairAddresses()));
+        } else {
+            setHotpairAddresses(new ArrayList<>());
+        }
+        
+        if(other.getLaggPorts() != null) {
+            setLaggPorts(new ArrayList<>(other.getLaggPorts()));
+        } else {
+            setLaggPorts(new ArrayList<>());
+        }
+
+        if(other.getSlots() != null) {
+            setSlots(new ArrayList<>(other.getSlots()));
+        } else {
+            setSlots(new ArrayList<>());
+        }
+
+        if(other.getNameServers() != null) {
+            setNameServers(new ArrayList<>(other.getNameServers()));
+        } else {
+            setNameServers(new ArrayList<>());
+        }
 
         // Convert IpAddresses to a list of string
         // because of dumb stuff
@@ -184,7 +214,14 @@ public class NetworkInterfaceSend {
     public void setLaggPorts(List<String> laggPorts) { this.laggPorts = laggPorts; }
     public void setSlots(List<String> slots) { this.slots = slots; }
     public void setNameServers(List<String> nameServers) { this.nameServers = nameServers; }
+    public void setAddresses(ArrayList<String> address) { this.addresses = address; }
+    @Deprecated // Doing it this way was dumb. Split into setAddresses(ArrayList) and setAddress(String)
     public void setAddresses(String address) {
+        ArrayList<String> addresses = new ArrayList<String>();
+        addresses.add(address);
+        this.setAddresses(addresses);
+    }
+    public void setAddress(String address) {
         ArrayList<String> addresses = new ArrayList<String>();
         addresses.add(address);
         this.setAddresses(addresses);

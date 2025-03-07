@@ -12,6 +12,7 @@ package com.spectralogic.blackpearl.nacre.command;
 import com.spectralogic.blackpearl.nacre.api.BpConnector;
 import com.spectralogic.blackpearl.nacre.model.NetworkInterface;
 import com.spectralogic.blackpearl.nacre.model.NetworkInterfaceConfig;
+import com.spectralogic.blackpearl.nacre.model.NetworkInterfaceSend;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,21 +60,55 @@ public class ConfigureNetworkInterface {
         if((iface.isAggregate() && lagg_list.size() == 0) || iface_list.size() == 0) {
             // The interface needs to be created.
             new_iface = createNew(iface, type, iface_list, pearl);
-        } else {
+        } else if(iface.isAggregate()) {
             // The interface needs to be updated.
-        
+            new_iface = updateLaggInterface(iface, type, iface_list, lagg_list, pearl);
+        } else {
+            new_iface = updateSingleInterface(iface, type, iface_list, pearl);
         }
         
         return new_iface;        
     }
 
-    public static NetworkInterface createNew(NetworkInterfaceConfig iface, String type, List<NetworkInterface> iface_list, BpConnector pearl) {
+    public static NetworkInterface createNew(NetworkInterfaceConfig iface, String type, List<NetworkInterface> iface_list, BpConnector pearl) throws Exception {
         if(iface.isAggregate()) {
             log.info("Creating new aggregate " + type + " network interface with address " + iface.getAddress());
         } else {
             log.info("Creating new " + type + " network interface with address " + iface.getAddress());
         }
 
+        return null;
+    }
+
+    public static NetworkInterface updateLaggInterface(NetworkInterfaceConfig iface, String type, List<NetworkInterface> iface_list, List<NetworkInterface> lagg_list, BpConnector pearl) throws Exception {
+        log.info("Updating aggregate " + type + " interface to have new address " + iface.getAddress());
+
+        NetworkInterfaceSend configured_iface = null;
+        NetworkInterface new_iface = null;
+
+        for(NetworkInterface lagg : lagg_list) {
+            if(lagg.getGroup().equals(type)) {
+                log.debug("Interface " + lagg.getName() + " is a lagg associated with " + type);
+                configured_iface = new NetworkInterfaceSend(lagg);
+            }
+        }
+        
+        if(configured_iface == null) {
+            log.warn("None of the existing LAgg interfaces belong to group: " + type);    
+            new_iface = createNew(iface, type, iface_list, pearl);
+        } else {
+            log.info("Updating network interface: " + configured_iface.getName());
+
+            configured_iface.setAddress(iface.getAddress() + "/" + iface.getPrefix());
+            configured_iface.setDefaultGateway(iface.getGateway());
+
+            new_iface = pearl.updateNetworkInterface(configured_iface);
+        }
+
+        return new_iface;
+    }
+
+    public static NetworkInterface updateSingleInterface(NetworkInterfaceConfig iface, String type, List<NetworkInterface> iface_list, BpConnector pearl) throws Exception {
         return null;
     }
 }
