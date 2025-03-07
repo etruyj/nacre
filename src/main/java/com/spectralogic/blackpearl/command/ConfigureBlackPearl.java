@@ -1157,7 +1157,7 @@ public class ConfigureBlackPearl {
 
                 new_pool.setAvailable(pool_available);
                 new_pool.setOverhead(pool_overhead);
-                new_pool.setUsed(0); // set used capacity to 0
+                new_pool.setUsed(0L); // set used capacity to 0, but the long version of it.
 
 
                 log.debug("Pool [" + new_pool.getName() + "] will have " + pool_available + " bytes available.");
