@@ -19,15 +19,15 @@ public class Pool {
     private int stripes;
     private String health;
     @SerializedName("raw_size")
-    private long raw_size;
+    private Long raw_size;
     @SerializedName("rebuild_status")
     private String rebuild_status;
     @SerializedName("scrub_status")
     private ScrubStatus scrub_status;
     private String status;
-    private long available;
-    private long overhead;
-    private long used;
+    private Long available;
+    private Long overhead;
+    private Long used;
     @SerializedName("zfs_status")
     private String zfs_status;
     @SerializedName("high_water_mark")
@@ -38,14 +38,14 @@ public class Pool {
     private String created_at;
     @SerializedName("updated_at")
     private String updated_at;
-    private boolean globalhotspare;
-    private boolean autoreplace;
+    private Boolean globalhotspare;
+    private Boolean autoreplace;
     @SerializedName("power_saving_mode")
     private String power_saving_mode;
     @SerializedName("special_available")
-    private long special_available;
+    private Long special_available;
     @SerializedName("special_used")
-    private long special_used;
+    private Long special_used;
     @SerializedName("disk_ids")
     private ArrayList<String> disk_ids;
     private ArrayList<Stripe> topology;
@@ -66,15 +66,7 @@ public class Pool {
     //===========================================
     // Constructors
     //===========================================
-    public Pool() {
-        disk_ids = new ArrayList<String>();
-        topology = new ArrayList<Stripe>();
-        log = new ArrayList<String>();
-        zil_drives = new ArrayList<String>();
-        special = new ArrayList<String>();
-        special_drives = new ArrayList<String>();
-        special_disk_ids = new ArrayList<String>();
-    } 
+    public Pool() {} // blank constructor to allow for copy constructor. 
 
     // Copy constructor
     public Pool(Pool other) {
@@ -144,23 +136,23 @@ public class Pool {
     public String getProtection() { return protection; }
     public int getStripes() { return stripes; }
     public String getHealth() { return health; }
-    public long getRawSize() { return raw_size; }
+    public Long getRawSize() { return raw_size; }
     public String getRebuildStatus() { return rebuild_status; }
     public ScrubStatus getScrubStatus() { return scrub_status; }
     public String getStatus() { return status; }
-    public long getAvailable() { return available; }
-    public long getOverhead() { return overhead; }
-    public long getUsed() { return used; }
+    public Long getAvailable() { return available; }
+    public Long getOverhead() { return overhead; }
+    public Long getUsed() { return used; }
     public String getZfsStatus() { return zfs_status; }
     public Integer getHighWaterMark() { return high_water_mark; }
     public String getLastImportTime() { return last_import_time; }
     public String getCreatedAt() { return created_at; }
     public String getUpdatedAt() { return updated_at; }
-    public boolean isGlobalhotspare() { return globalhotspare; }
-    public boolean isAutoreplace() { return autoreplace; }
+    public Boolean isGlobalhotspare() { return globalhotspare; }
+    public Boolean isAutoreplace() { return autoreplace; }
     public String getPowerSavingMode() { return power_saving_mode; }
-    public long getSpecialAvailable() { return special_available; }
-    public long getSpecialUsed() { return special_used; }
+    public Long getSpecialAvailable() { return special_available; }
+    public Long getSpecialUsed() { return special_used; }
     public ArrayList<String> getDiskIds() { return disk_ids; }
     public ArrayList<Stripe> getTopology() { return topology; }
     public ArrayList<String> getLog() { return log; }
@@ -175,30 +167,43 @@ public class Pool {
     //===========================================
     // Settors
     //===========================================
-    public void addDiskId(String id) { disk_ids.add(id); }
-    public void addStripe(Stripe stripe) { topology.add(stripe); }
+    public void addDiskId(String id) { 
+        if(disk_ids == null) {
+            disk_ids = new ArrayList<String>();
+        }
+
+        disk_ids.add(id); 
+    }
+    public void addStripe(Stripe stripe) { 
+        if(topology == null) {
+            topology = new ArrayList<String>();
+        }
+
+        topology.add(stripe); 
+    }
+
     public void setId(String id) { this.id = id; }
     public void setName(String name) { this.name = name; }
     public void setProtection(String protection) { this.protection = protection; }
     public void setStripes(int stripes) { this.stripes = stripes; }
     public void setHealth(String health) { this.health = health; }
-    public void setRawSize(long raw_size) { this.raw_size = raw_size; }
+    public void setRawSize(Long raw_size) { this.raw_size = raw_size; }
     public void setRebuildStatus(String rebuild_status) { this.rebuild_status = rebuild_status; }
     public void setScrubStatus(ScrubStatus scrub_status) { this.scrub_status = scrub_status; }
     public void setStatus(String status) { this.status = status; }
-    public void setAvailable(long available) { this.available = available; }
-    public void setOverhead(long overhead) { this.overhead = overhead; }
-    public void setUsed(long used) { this.used = used; }
+    public void setAvailable(Long available) { this.available = available; }
+    public void setOverhead(Long overhead) { this.overhead = overhead; }
+    public void setUsed(Long used) { this.used = used; }
     public void setZfsStatus(String zfs_status) { this.zfs_status = zfs_status; }
     public void setHighWaterMark(Integer high_water_mark) { this.high_water_mark = high_water_mark; }
     public void setLastImportTime(String last_import_time) { this.last_import_time = last_import_time; }
     public void setCreatedAt(String created_at) { this.created_at = created_at; }
     public void setUpdatedAt(String updated_at) { this.updated_at = updated_at; }
-    public void setGlobalhotspare(boolean globalhotspare) { this.globalhotspare = globalhotspare; }
-    public void setAutoreplace(boolean autoreplace) { this.autoreplace = autoreplace; }
+    public void setGlobalhotspare(Boolean globalhotspare) { this.globalhotspare = globalhotspare; }
+    public void setAutoreplace(Boolean autoreplace) { this.autoreplace = autoreplace; }
     public void setPowerSavingMode(String power_saving_mode) { this.power_saving_mode = power_saving_mode; }
-    public void setSpecialAvailable(long special_available) { this.special_available = special_available; }
-    public void setSpecialUsed(long special_used) { this.special_used = special_used; }
+    public void setSpecialAvailable(Long special_available) { this.special_available = special_available; }
+    public void setSpecialUsed(Long special_used) { this.special_used = special_used; }
     public void setDiskIds(ArrayList<String> disk_ids) { this.disk_ids = disk_ids; }
     public void setTopology(ArrayList<Stripe> topology) { this.topology = topology; }
     public void setLog(ArrayList<String> log) { this.log = log; }

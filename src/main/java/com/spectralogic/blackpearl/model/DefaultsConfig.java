@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DefaultsConfig {
-    private Pool nasPool;
-    private Pool ds3Pool;
+    private PoolConfig nasPool;
+    private PoolConfig ds3Pool;
     private DiskPartition ds3DiskPartition;
     private VolumeConfig volume;
     private ShareConfig cifsShare;
@@ -34,8 +34,8 @@ public class DefaultsConfig {
     private ServerConfig server;
 
     public DefaultsConfig() {
-        nasPool = new Pool();
-        ds3Pool = new Pool();
+        nasPool = new PoolConfig();
+        ds3Pool = new PoolConfig();
         ds3DiskPartition = new DiskPartition();
         volume = new VolumeConfig();
         storageDomainMember = new StorageDomainMemberConfig();
@@ -57,8 +57,8 @@ public class DefaultsConfig {
     //===========================================
     // Getters
     //===========================================
-    public Pool getNasPool() { return nasPool; }
-    public Pool getDs3Pool() { return ds3Pool; }
+    public PoolConfig getNasPool() { return nasPool; }
+    public PoolConfig getDs3Pool() { return ds3Pool; }
     public DiskPartition getDs3DiskPartition() { return ds3DiskPartition; }
     public VolumeConfig getVolume() { return volume; }
     public StorageDomainMemberConfig getStorageDomainMember() { return storageDomainMember; }
@@ -79,8 +79,8 @@ public class DefaultsConfig {
     //===========================================
     // Setters
     //===========================================
-    public void setNasPool(Pool pool) { this.nasPool = pool; }
-    public void setDs3Pool(Pool pool) { this.ds3Pool = pool; }
+    public void setNasPool(PoolConfig pool) { this.nasPool = pool; }
+    public void setDs3Pool(PoolConfig pool) { this.ds3Pool = pool; }
     public void setDs3DiskPartition(DiskPartition par) { this.ds3DiskPartition = par; } 
     public void setVolume(VolumeConfig vol) { this.volume = vol; }
     public void setStorageDomainMember(StorageDomainMemberConfig storageDomainMember) { this.storageDomainMember = storageDomainMember; }

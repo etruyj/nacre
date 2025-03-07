@@ -20,6 +20,10 @@ public class PoolConfig extends Pool {
     private Integer drive_count;
     @SerializedName("stripe_name")
     private String stripe_name; // this is used for OSD pools.
+    @SerializedName("metadata_drives")
+    private Boolean metadata_drives;
+    @SerializedName("write_performance_drives")
+    private Boolean write_performance_drives;
 
     //===========================================
     // Constructors
@@ -42,6 +46,8 @@ public class PoolConfig extends Pool {
     // here to simplify the code change.
     public String getProtectionLevel() { return this.getProtection(); }
     public String getStripeName() { return stripe_name; }
+    public Boolean getMetadataDrives() { return metadata_drives; }
+    public Boolean getWritePerformanceDrives() { return write_performance_drives; }
 
     //===========================================
     // Setters
@@ -49,5 +55,7 @@ public class PoolConfig extends Pool {
     public void setDriveType(String type) { this.drive_type = type; }
     public void setDriveCount(Integer drives) { this.drive_count = drives; }
     public void setStripeName(String name) { this.stripe_name = name; }
+    public void setMetadataDrives(Boolean use_drives) { this.metadata_drives = use_drives; }
+    public void setWritePerformanceDrives(Boolean use_drives) { this.write_performance_drives = use_drives; }
 }
 
