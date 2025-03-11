@@ -182,6 +182,13 @@ public class NetworkInterfaceSend {
     //===========================================
     // Setters
     //===========================================
+    public void addLaggPort(String port) {
+        if(laggPorts == null) {
+            laggPorts = new ArrayList<String>();
+        }
+
+        laggPorts.add(port);
+    }
     public void setId(String id) { this.id = id; }
     public void setLinkStatus(String linkStatus) { this.linkStatus = linkStatus; }
     public void setDhcp(boolean dhcp) { this.dhcp = dhcp; }

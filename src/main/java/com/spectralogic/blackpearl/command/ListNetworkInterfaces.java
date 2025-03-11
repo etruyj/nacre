@@ -2,6 +2,12 @@
 // ListNetworkInterfaces.java
 //      Description:
 //          This class handles commands associated with list interfaces.
+//          The class provides different types of filters for the network
+//          interfaces. 
+//          
+//          Types:
+//              active: connected, up, and IP assigned.
+//              connected: connected, but no IP assigned.
 //
 // Created by Sean Snyder
 // Copyright Spectra Logic 2024
@@ -53,6 +59,24 @@ public class ListNetworkInterfaces {
         }
 
         log.info("Found (" + data_list.size() + ") active [" + type + "] interfaces.");
+
+        return data_list;
+    }
+
+    public static ArrayList<NetworkInterface> connectedByType(String type, BpConnector pearl) {
+        log.info("Listing connected interfaces of type [" + type + "] in the BlackPearl.");
+
+        ArrayList<NetworkInterface> data_list = new ArrayList<NetworkInterface>();
+
+        ArrayList<NetworkInterface> interface_list = all(pearl);
+
+        for(NetworkInterface interf : interface_list) {
+            if(interf.getType().equals(type) && interf.getLinkSpeed() > 0) {
+                data_list.add(interf);
+            }
+        }
+
+        log.info("Found (" + data_list.size() + ") connector [" + type + "] interfaces.");
 
         return data_list;
     }

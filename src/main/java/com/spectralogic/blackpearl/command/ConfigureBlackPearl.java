@@ -320,23 +320,12 @@ public class ConfigureBlackPearl {
 
 
         //=======================================
-        // Set Data Interface
+        // Configure Network Interfaces
         //=======================================
-        NetworkInterfaceConfig data_interface = config.getNetworkInterface("data");
+        System.out.println("Configuring network interfaces.");
+        String network_message = ConfigureNetworkInterface.interfacesFromMap(config.getNetworkInterfaces(), pearl);
 
-        if(data_interface != null) {
-
-        } else {
-            message = "No configuration information for BlackPearl data interface.";
-        }
-
-        //results.add(message);
-
-        //=======================================
-        // Set Management Interface
-        //=======================================
-        // Do this last in case it severs connection
-        // to the server.
+        results.add(network_message);
 
         System.out.println("BlackPearl configuration is complete.");
 
@@ -1054,7 +1043,8 @@ public class ConfigureBlackPearl {
                 new_pool.setName(pool.getName());
                 new_pool.setStripes(pool.getStripes());
                 new_pool.setProtection(pool.getProtectionLevel());
-                
+                new_pool.setProtectionSelect(pool.getProtectionLevel()); // possibly duplicate requirement from BP.
+
                 // Check for potential options
                 if(pool.getType() != null) {
                     new_pool.setType(pool.getType());
@@ -1070,7 +1060,12 @@ public class ConfigureBlackPearl {
 
                 if(pool.getEncryptionState() != null) {
                     new_pool.setEncryptionState(pool.getEncryptionState());
+                } else {
+                    // Set the encryption state as disabled if not specified.
+                    new_pool.setEncryptionState("Disabled");
                 }
+
+               
 
                 // Assign Drives to Pool
                 // reset to 0

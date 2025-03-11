@@ -97,6 +97,17 @@ public class NetworkInterface {
     public List<String> getLaggPorts() { return laggPorts; }
     public List<String> getSlots() { return slots; }
     public List<String> getNameServers() { return nameServers; }
+    public String getAddressString() {
+        String address = "";
+
+        for(IpAddress ip : this.addresses) {
+            address += ip.getAddress() + ", ";
+        }
+
+        address = address.substring(0, address.length()-2);
+
+        return address;
+    }
 
     //===========================================
     // Setters
