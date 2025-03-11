@@ -62,11 +62,19 @@ public class Pool {
     private String encryption_state;
     @SerializedName("ds3_pool_health")
     private String ds3_pool_health;
+    @SerializedName("auto_trim")
+    private Boolean auto_trim;
+    @SerializedName("protection_select")
+    private String protection_select;
+
 
     //===========================================
     // Constructors
     //===========================================
-    public Pool() {} // blank constructor to allow for copy constructor. 
+    public Pool() {
+        this.encryption_state="Disabled";
+
+    } // blank constructor to allow for copy constructor. 
 
     // Copy constructor
     public Pool(Pool other) {
@@ -95,7 +103,9 @@ public class Pool {
         this.setType(other.getType());
         this.setEncryptionState(other.getEncryptionState());
         this.setDs3PoolHealth(other.getDs3PoolHealth());
-    
+        this.setProtectionSelect(other.getProtectionSelect());
+        this.setAutoTrim(other.getAutoTrim());
+
         //=== Copy disk_ids ===
         disk_ids = new ArrayList<String>();
         for(String id : other.getDiskIds()) { disk_ids.add(id); }
@@ -163,6 +173,8 @@ public class Pool {
     public String getType() { return type; }
     public String getEncryptionState() { return encryption_state; }
     public String getDs3PoolHealth() { return ds3_pool_health; }
+    public Boolean getAutoTrim() { return auto_trim; }
+    public String getProtectionSelect() { return protection_select; }
 
     //===========================================
     // Settors
@@ -214,4 +226,6 @@ public class Pool {
     public void setType(String type) { this.type = type; }
     public void setEncryptionState(String state) { this.encryption_state = state; }
     public void setDs3PoolHealth(String state) { this.ds3_pool_health = state; }
+    public void setAutoTrim(Boolean auto_trim) { this.auto_trim = auto_trim; }
+    public void setProtectionSelect(String protection_select) { this.protection_select = protection_select; }
 }
