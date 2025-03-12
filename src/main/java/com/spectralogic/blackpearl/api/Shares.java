@@ -43,7 +43,7 @@ public class Shares {
         Share new_share = gson.fromJson(response, Share.class);
     
         // Check if a new share was created or just an empty reference.
-        if(new_share.getName() != null) {
+        if(new_share.getVolumeId() != null) {
             return new_share;
         } else {
             return null;

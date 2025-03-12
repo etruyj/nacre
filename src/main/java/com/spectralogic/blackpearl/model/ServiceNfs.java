@@ -22,7 +22,6 @@ public class ServiceNfs extends Service{
     private int threads;
     @SerializedName("dependency_attrs")
     private List<Object> dependencyAttrs;
-    private String type;
     @SerializedName("sub_type")
     private String subType;
     @SerializedName("state")
@@ -41,7 +40,6 @@ public class ServiceNfs extends Service{
     public boolean isUdp() { return udp; }
     public int getThreads() { return threads; }
     public List<Object> getDependencyAttrs() { return dependencyAttrs; }
-    public String getType() { return type; }
     public String getSubType() { return subType; }
     public String getState() { return state; }
     public boolean isEnabled() { return enabled; }
@@ -56,7 +54,6 @@ public class ServiceNfs extends Service{
     public void setUdp(boolean udp) { this.udp = udp; }
     public void setThreads(int threads) { this.threads = threads; }
     public void setDependencyAttrs(List<Object> dependencyAttrs) { this.dependencyAttrs = dependencyAttrs; }
-    public void setType(String type) { this.type = type; }
     public void setSubType(String subType) { this.subType = subType; }
     public void setState(String state) { this.state = state; }
     public void setEnabled(boolean enabled) { this.enabled = enabled; }

@@ -31,7 +31,7 @@ public class Share {
     private String status;
     private boolean readonly;
     //=== NFS Specific ===
-    @SerializedName("accessControl")
+    @SerializedName("access_control")
     private String accessControl;
     private String comment;
 

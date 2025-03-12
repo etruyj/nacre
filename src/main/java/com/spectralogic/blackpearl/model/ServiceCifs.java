@@ -19,7 +19,6 @@ public class ServiceCifs extends Service {
     private boolean localStatus;
     @SerializedName("dependency_attrs")
     private List<Object> dependencyAttrs;
-    private String type;
     @SerializedName("sub_type")
     private String subType;
     private String state;
@@ -35,7 +34,6 @@ public class ServiceCifs extends Service {
     //===========================================
     public boolean isLocalStatus() { return localStatus; }
     public List<Object> getDependencyAttrs() { return dependencyAttrs; }
-    public String getType() { return type; }
     public String getSubType() { return subType; }
     public String getState() { return state; }
     public boolean isEnabled() { return enabled; }
@@ -48,7 +46,6 @@ public class ServiceCifs extends Service {
     //===========================================
     public void setLocalStatus(boolean localStatus) { this.localStatus = localStatus; }
     public void setDependencyAttrs(List<Object> dependencyAttrs) { this.dependencyAttrs = dependencyAttrs; }
-    public void setType(String type) { this.type = type; }
     public void setSubType(String subType) { this.subType = subType; }
     public void setState(String state) { this.state = state; }
     public void setEnabled(boolean enabled) { this.enabled = enabled; }

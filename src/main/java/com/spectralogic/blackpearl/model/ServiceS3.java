@@ -19,7 +19,6 @@ public class ServiceS3 extends Service {
     private String scheduled_iom;
     @SerializedName("dependency_attrs")
     private List<String> dependency_attrs;
-    private String type;
     @SerializedName("sub_type")
     private String sub_type;
     private String state;
@@ -66,7 +65,6 @@ public class ServiceS3 extends Service {
     public String getArcticBluePoolConfig() { return arctic_blue_pool_config; }
     public String getScheduledIom() { return scheduled_iom; }
     public List<String> getDependencyAttrs() { return dependency_attrs; }
-    public String getType() { return type; }
     public String getSubType() { return sub_type; }
     public String getState() { return state; }
     public boolean isEnabled() { return enabled; }
@@ -96,7 +94,6 @@ public class ServiceS3 extends Service {
     public void setArcticBluePoolConfig(String arctic_blue_pool_config) { this.arctic_blue_pool_config = arctic_blue_pool_config; }
     public void setScheduledIom(String scheduled_iom) { this.scheduled_iom = scheduled_iom; }
     public void setDependencyAttrs(List<String> dependency_attrs) { this.dependency_attrs = dependency_attrs; }
-    public void setType(String type) { this.type = type; }
     public void setSubType(String sub_type) { this.sub_type = sub_type; }
     public void setState(String state) { this.state = state; }
     public void setEnabled(boolean enabled) { this.enabled = enabled; }
