@@ -1047,7 +1047,13 @@ public class ConfigureBlackPearl {
 
                 // Check for potential options
                 if(pool.getType() != null) {
-                    new_pool.setType(pool.getType());
+                    if(pool.getType().equals("nas")) {
+                        // The actual pool type for a NAS pool when created via the GUI
+                        // is pool
+                        new_pool.setType("pool"); 
+                    } else {
+                        new_pool.setType(pool.getType());
+                    }
                 }
 
                 if(pool.getPowerSavingMode() != null) {
@@ -1150,6 +1156,7 @@ public class ConfigureBlackPearl {
                         break; 
                 }
 
+                new_pool.setRawSize(pool_total);
                 new_pool.setAvailable(pool_available);
                 new_pool.setOverhead(pool_overhead);
                 new_pool.setUsed(0L); // set used capacity to 0, but the long version of it.

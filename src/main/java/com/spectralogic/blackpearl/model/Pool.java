@@ -11,6 +11,7 @@ package com.spectralogic.blackpearl.nacre.model;
 
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Pool {
     private String id;
@@ -107,35 +108,38 @@ public class Pool {
         this.setAutoTrim(other.getAutoTrim());
 
         //=== Copy disk_ids ===
-        disk_ids = new ArrayList<String>();
-        for(String id : other.getDiskIds()) { disk_ids.add(id); }
-
+        this.disk_ids = other.getDiskIds() != null ? 
+                            new ArrayList<String>(other.getDiskIds()) :
+                            new ArrayList<String>();
         //=== Copy Topology ===
-        topology = new ArrayList<Stripe>();
-        for(Stripe stripe : other.getTopology()) { topology.add(stripe); }
+        this.topology = other.getTopology() != null ?
+                            new ArrayList<Stripe>(other.getTopology()) :
+                            new ArrayList<Stripe>();
 
         //=== Copy Log ===
-        log = new ArrayList<String>();
-        for(String line : other.getLog()) { log.add(line); }
+        this.log = other.getLog() != null ?
+                    new ArrayList<String>(other.getLog()) :
+                    new ArrayList<String>();
 
         //=== Copy Zil Drives ===
-        zil_drives = new ArrayList<String>();
-        for(String drive : other.getZilDrives()) { zil_drives.add(drive); }
+        this.zil_drives = other.getZilDrives() != null ?
+                            new ArrayList<String>(other.getZilDrives()) :
+                            new ArrayList<String>();
 
         //=== Copy special ===
-        special = new ArrayList<String>();
-        for(String drive : other.getSpecial()) { special.add(drive); }
+        this.special = other.getSpecial() != null ?
+                        new ArrayList<String>(other.getSpecial()) :
+                        new ArrayList<String>();
 
         //=== Copy special_drives ===
-        special_drives = new ArrayList<String>();
-        for(String drive : other.getSpecial()) { special_drives.add(drive); }
+        this.special_drives = other.getSpecial() != null ?
+                                new ArrayList<String>(other.getSpecial()) :
+                                new ArrayList<String>();
 
         //=== Copy special_disk_ids ===
-        special_disk_ids = new ArrayList<String>();
-        for(String drive : other.getSpecial()) { special_disk_ids.add(drive); }
-
-        
-
+        this.special_disk_ids = other.getSpecial() != null ?
+                                    new ArrayList<String>(other.getSpecialDiskIds()) :
+                                    new ArrayList<String>();
     }
     
     //===========================================
