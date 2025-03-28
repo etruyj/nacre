@@ -824,7 +824,7 @@ public class ConfigureBlackPearl {
                 // Added a vail-owned flag to the Ds3BucketConfig to control for Buckets in the Vail
                 // configuration. As Vail creates the buckets, these buckets should be skipped during
                 // the nacre bucket creation process. 
-                if(bucket.isVailOwned() != null && !bucket.isVailOwned()) {
+                if(bucket.isVailOwned() == null || !bucket.isVailOwned()) {
                     new_bucket = CreateDs3Bucket.fromObject(new_bucket, pearl);
                 } else {
                     log.info("Bucket is vail-owned. Skipping the creation of " + bucket.getName() + ". Vail will handle bucket creation.");
