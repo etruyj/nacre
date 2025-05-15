@@ -21,6 +21,7 @@ import com.spectralogic.blackpearl.nacre.model.DiskPartition;
 import com.spectralogic.blackpearl.nacre.model.Ds3Bucket;
 import com.spectralogic.blackpearl.nacre.model.Ds3User;
 import com.spectralogic.blackpearl.nacre.model.DriveTypeSummary;
+import com.spectralogic.blackpearl.nacre.model.Message;
 import com.spectralogic.blackpearl.nacre.model.NetworkInterface;
 import com.spectralogic.blackpearl.nacre.model.NtpSettings;
 import com.spectralogic.blackpearl.nacre.model.Pool;
@@ -153,6 +154,10 @@ public class BpController {
 
     public ArrayList<DiskPartition> listDs3DiskPartitions() {
         return ListDs3DiskPartitions.all(pearl);
+    }
+
+    public ArrayList<Message> listMessages() {
+        return ListMessages.all(pearl);
     }
 
     public ArrayList<NetworkInterface> listNetworkInterfacesActive() {

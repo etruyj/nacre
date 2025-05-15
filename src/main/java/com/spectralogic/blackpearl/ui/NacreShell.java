@@ -65,6 +65,9 @@ public class NacreShell {
                 case "list-data-policies":
                     conn.listDataPolicies();
                     break;
+                case "list-messages":
+                    output = conn.listMessages();
+                    break;
                 case "list-network-interfaces":
                     if(aparser.getBoolean("active")) {
                         output = conn.listNetworkInterfacesActive();

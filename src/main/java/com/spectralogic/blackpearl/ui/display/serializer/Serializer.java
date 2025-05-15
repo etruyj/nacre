@@ -9,6 +9,7 @@
 
 package com.spectralogic.blackpearl.nacre.ui.display.serializer;
 
+import com.spectralogic.blackpearl.nacre.model.Message;
 import com.spectralogic.blackpearl.nacre.model.NetworkInterface;
 import com.spectralogic.blackpearl.nacre.model.Output;
 
@@ -19,7 +20,9 @@ public class Serializer {
         ArrayList<Output> output_list = new ArrayList<Output>();
 
         if(array != null && array.size() > 0) {
-            if(array.get(0) instanceof NetworkInterface) {
+            if(array.get(0) instanceof Message) {
+                output_list = SerializeMessage.forOutput(array);
+            } else if(array.get(0) instanceof NetworkInterface) {
                 output_list = SerializeNetworkInterface.forOutput(array);
             }
         }

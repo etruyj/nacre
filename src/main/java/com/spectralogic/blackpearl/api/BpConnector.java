@@ -18,6 +18,7 @@ import com.spectralogic.blackpearl.nacre.model.DataPersistenceRule;
 import com.spectralogic.blackpearl.nacre.model.DataPolicy;
 import com.spectralogic.blackpearl.nacre.model.DiskDrive;
 import com.spectralogic.blackpearl.nacre.model.DiskPartition;
+import com.spectralogic.blackpearl.nacre.model.Message;
 import com.spectralogic.blackpearl.nacre.model.NetworkInterface;
 import com.spectralogic.blackpearl.nacre.model.NetworkInterfaceSend;
 import com.spectralogic.blackpearl.nacre.model.NtpSettings;
@@ -167,6 +168,10 @@ public class BpConnector {
 
     public ArrayList<DiskPartition> listDiskPartitions() throws IOException, JsonParseException {
         return Ds3DiskPartitions.list(domain_name, token, rest_client);
+    }
+
+    public ArrayList<Message> listMessages() throws IOException, JsonParseException {
+        return Messages.list(domain_name, token, rest_client);
     }
 
     public ArrayList<NetworkInterface> listNetworkInterfaces() throws IOException, JsonParseException {
