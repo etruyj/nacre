@@ -322,10 +322,12 @@ public class ConfigureBlackPearl {
         //=======================================
         // Configure Network Interfaces
         //=======================================
-        System.out.println("Configuring network interfaces.");
-        String network_message = ConfigureNetworkInterface.interfacesFromMap(config.getNetworkInterfaces(), pearl);
+        if(config.getNetworkInterfaces() != null && !config.getNetworkInterfaces().isEmpty()) {
+            System.out.println("Configuring network interfaces.");
+            String network_message = ConfigureNetworkInterface.interfacesFromMap(config.getNetworkInterfaces(), pearl);
 
-        results.add(network_message);
+            results.add(network_message);
+        }
 
         System.out.println("BlackPearl configuration is complete.");
 
