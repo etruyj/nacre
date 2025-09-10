@@ -219,9 +219,10 @@ public class BpConnector {
     }
 
     public boolean login(String username, String password) throws IOException, JsonParseException {
-        token = "Bearer " + Authenticate.getToken(username, password, domain_name, rest_client);
+        token = Authenticate.getToken(username, password, domain_name, rest_client);
 
         if(token != null && token.length() > 0) {
+            token = "Bearer " + token;
             return true;
         } else {
             return false;

@@ -52,13 +52,16 @@ public class AddActivationKey {
         int loop_counter = 0;
 
         ActivationKey raw_key = new ActivationKey();
+        ActivationKey check_key = null;
         raw_key.setRawKey(key.getKey());
         BlackPearlNode node = null;
 
         try {
-            raw_key = pearl.addActivationKey(raw_key);
+            // Add the key
+            check_key = pearl.addActivationKey(raw_key);
             
-            if(raw_key != null && defaults.getServer().getKeySettings().get(key.getName()) != null) {
+            // Determine if a restart of the BlackPearl is expected.
+            if(check_key != null && defaults.getServer().getKeySettings().get(key.getName()) != null) {
                 if(defaults.getServer()
                         .getKeySettings()
                         .get(key.getName())
@@ -66,15 +69,18 @@ public class AddActivationKey {
                     log.warn("System restart expected with key [" + key.getName() + "]");
                     restart_expected = true;
                 }
-            } else if(raw_key == null) {
+            } else if(check_key == null) {
                 log.error("Failed to add activation key [" + key.getKey() + "] to BlackPearl.");
             }
        
+            // Wait for the restart to complete
+            // 1.) system stops responding to pings = offline
+            // 2.) system starts responding to pings = online
             do {
                 node = ListNodes.active(pearl);
 
                 if(node.getPendingShutdown() != null) { 
-                    System.out.println("Activation key [" + raw_key.getRawKey() + "] requires reboot. Waiting for system to come back online.");
+                    System.out.println("Activation key [" + check_key.getRawKey() + "] requires reboot. Waiting for system to come back online.");
                     log.warn("BlackPearl restart is set to " + node.getPendingShutdown().getAction());
 
                     log.warn("Waiting for system to power down.");
@@ -108,7 +114,7 @@ public class AddActivationKey {
             log.error("Failed to add activation key [" + key.getKey() + "] to BlackPearl.");
         }
 
-        return raw_key;
+        return check_key;
     }
 
     private static void waitForAvailable(int interval_seconds, BpConnector pearl) {

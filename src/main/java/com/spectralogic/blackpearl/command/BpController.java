@@ -83,8 +83,8 @@ public class BpController {
         AddActivationKey.fromUserInput(key, name, defaults, pearl);
     }
 
-    public void addActivationKey(ActivationKeyConfig key, DefaultsConfig defaults) {
-        AddActivationKey.fromObject(key, defaults, pearl);
+    public ActivationKey addActivationKey(ActivationKeyConfig key, DefaultsConfig defaults) {
+        return AddActivationKey.fromObject(key, defaults, pearl);
     }
 
     public void backupDatabase() {
